@@ -1,7 +1,5 @@
 export class GitHubSource {
-    constructor() {
-    }
+	constructor() {}
 
-    async fetch() {
-    }
+	async fetch() {}
 }
