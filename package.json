@@ -2,10 +2,10 @@
   "name": "github-workflows-metrics",
   "version": "0.1.0",
   "description": "Measure metrics for GitHub Actions workflows.",
-  "type": "module",
-  "main": "./dist/index.js",
+  "main": "dist/index.js",
   "scripts": {
     "build": "ncc build src/index.ts",
+    "tsc:check": "tsc --noEmit",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Yutaka Kamei",
