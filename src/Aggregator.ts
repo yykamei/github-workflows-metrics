@@ -15,10 +15,3 @@ export class Aggregator {
 		return this.source.fetch();
 	}
 }
-
-if (import.meta.vitest) {
-	const { it, expect } = import.meta.vitest;
-	it("true", () => {
-		expect(true).toBe(true);
-	});
-}
