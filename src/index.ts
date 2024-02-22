@@ -1,5 +1,5 @@
-import { Aggregator } from "./src/Aggregator.mjs";
-import { Configuration } from "./src/Configuration.mjs";
+import { Aggregator } from "./Aggregator";
+import { Configuration } from "./Configuration";
 
 const main = async () => {
 	const configuration = new Configuration({ source: "github" });

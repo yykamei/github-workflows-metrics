@@ -1,9 +1,13 @@
+import { Configuration } from "./Configuration";
+import { Source } from "./Source";
+
 export class Aggregator {
+	private source: Source;
 	/**
 	 *
 	 * @param {Configuration} configuration - The global configuration for this package.
 	 */
-	constructor(configuration) {
+	constructor(configuration: Configuration) {
 		this.source = configuration.source;
 	}
 
