@@ -8,13 +8,14 @@
     "biome:check": "biome check --apply .",
     "biome:ci": "biome ci .",
     "tsc:check": "tsc --noEmit",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "vitest"
   },
   "author": "Yutaka Kamei",
   "license": "MIT",
   "devDependencies": {
     "@biomejs/biome": "1.5.3",
     "@vercel/ncc": "0.38.1",
-    "typescript": "5.3.3"
+    "typescript": "5.3.3",
+    "vitest": "1.3.1"
   }
 }

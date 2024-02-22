@@ -4,7 +4,13 @@
 		"enabled": true
 	},
 	"files": {
-		"ignore": ["dist/*"]
+		"ignore": ["dist/*"],
+		"ignoreUnknown": true
+	},
+	"json": {
+		"formatter": {
+			"enabled": true
+		}
 	},
 	"linter": {
 		"enabled": true,

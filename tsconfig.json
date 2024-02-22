@@ -3,11 +3,12 @@
     "incremental": true,
     "target": "ES2022",
     "module": "ES2022",
-    "lib": ["ESNext"],
+    "lib": [
+      "ESNext"
+    ],
     "allowJs": false,
     "outDir": "./dist",
     "composite": false,
-
     "strict": true,
     "noImplicitAny": true,
     "strictNullChecks": true,
@@ -23,13 +24,16 @@
     "noUncheckedIndexedAccess": true,
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,
-
     "moduleResolution": "node",
     "resolveJsonModule": true,
-    "rootDirs": ["src"],
+    "rootDirs": [
+      "src"
+    ],
     "esModuleInterop": true,
-
     "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true
+    "forceConsistentCasingInFileNames": true,
+    "types": [
+      "vitest/importMeta"
+    ]
   }
 }
