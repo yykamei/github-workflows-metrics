@@ -1,5 +1,5 @@
-import { Source } from "./Source";
 import { GitHubSource } from "./GitHubSource";
+import type { Source } from "./Source";
 
 export type ConfigurationInput = {
 	source: string;

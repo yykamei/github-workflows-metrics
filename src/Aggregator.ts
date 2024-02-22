@@ -1,5 +1,5 @@
 import { Configuration } from "./Configuration";
-import { Source } from "./Source";
+import type { Source } from "./Source";
 
 export class Aggregator {
 	private source: Source;
