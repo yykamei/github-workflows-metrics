@@ -12,6 +12,9 @@
   },
   "author": "Yutaka Kamei",
   "license": "MIT",
+  "dependencies": {
+    "@actions/github": "6.0.0"
+  },
   "devDependencies": {
     "@biomejs/biome": "1.5.3",
     "@vercel/ncc": "0.38.1",
