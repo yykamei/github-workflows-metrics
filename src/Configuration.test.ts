@@ -1,26 +1,20 @@
-import { beforeEach, describe, expect, it } from "vitest";
-import { Configuration, ConfigurationInput } from "./Configuration";
-import { GitHubSource } from "./GitHubSource";
+import { describe, expect, it } from "vitest";
+import { Configuration } from "./Configuration";
+import { GitHubAggregator } from "./GitHubAggregator";
 
 describe("Configuration", () => {
-	let githubToken: string;
-	let source: string;
-	let configInput: ConfigurationInput;
-
-	beforeEach(() => {
-		githubToken = "testToken";
-		source = "github";
-		configInput = { githubToken, source };
-	});
-
 	it("should create a Configuration with GitHubSource when source is github", () => {
-		const config = new Configuration(configInput);
-		expect(config.githubToken).toBe(githubToken);
-		expect(config.source).toBeInstanceOf(GitHubSource);
+		const config = new Configuration({
+			source: "github",
+			githubToken: "token",
+			owner: "yykamei",
+			repo: "github-workflows-metrics",
+			workflowId: "ci.yml",
+		});
+		expect(config.aggregator).toBeInstanceOf(GitHubAggregator);
 	});
 
 	it("should throw an error when source is not supported", () => {
-		configInput.source = "unsupportedSource";
-		expect(() => new Configuration(configInput)).toThrowError();
+		expect(() => new Configuration({ source: "memory" })).toThrowError();
 	});
 });
