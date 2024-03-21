@@ -1,6 +1,6 @@
 import { getOctokit } from "@actions/github";
 
-import { Aggregator } from "./Aggregator";
+import type { Aggregator } from "./Aggregator";
 
 type Params = {
 	githubToken: string;
