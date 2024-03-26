@@ -1,5 +1,6 @@
 import type { Aggregator } from "./Aggregator";
 import { GitHubAggregator } from "./GitHubAggregator";
+import { MemoryAggregator } from "./MemoryAggregator";
 
 export type ConfigurationInput =
 	| {
@@ -28,8 +29,8 @@ export class Configuration {
 		switch (params.source) {
 			case "github":
 				return new GitHubAggregator(params);
-			default:
-				throw new Error(`Unsupported source: ${params.source}`);
+			case "memory":
+				return new MemoryAggregator();
 		}
 	}
 }

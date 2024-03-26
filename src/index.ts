@@ -1,15 +1,8 @@
-import { Configuration } from "./Configuration";
+import { setFailed } from "@actions/core";
+import main from "./main";
 
-const main = async () => {
-	const configuration = new Configuration({
-		source: "github",
-		githubToken: "token",
-		owner: "yykamei",
-		repo: "github-workflows-metrics",
-		workflowId: "ci.yml",
-	});
-	const aggregator = configuration.aggregator;
-	await aggregator.fetch();
-};
-
-export default main;
+try {
+	await main();
+} catch (e) {
+	setFailed(`Unhandled error: ${e}`);
+}
