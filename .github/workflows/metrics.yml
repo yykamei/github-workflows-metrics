@@ -1,8 +1,11 @@
 name: GitHub Workflow Metrics
 on:
   workflow_dispatch:
+env:
+  ACTIONS_STEP_DEBUG: "true"
 jobs:
   ci:
     runs-on: ubuntu-latest
     steps:
-      - uses: yykamei/github-workflow-metrics@main
+      - uses: actions/checkout@v4
+      - uses: ./
