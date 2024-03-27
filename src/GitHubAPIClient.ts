@@ -1,7 +1,8 @@
 import { getOctokit } from "@actions/github";
 import type { Octokit } from "@octokit/core";
-import type { APIClient } from "./APIClient";
+import type { APIClient, IssueBody } from "./APIClient";
 import { DateTime } from "./DateTime";
+import { GitHubIssue } from "./GitHubIssue";
 import { GitHubWorkflow } from "./GitHubWorkflow";
 import { GitHubWorkflowRun } from "./GitHubWorkflowRun";
 
@@ -76,5 +77,31 @@ export class GitHubAPIClient implements APIClient {
 					updatedAt: new DateTime(r.updated_at),
 				}),
 		);
+	}
+
+	async createIssue(
+		owner: string,
+		repo: string,
+		issueBody: IssueBody,
+	): Promise<GitHubIssue> {
+		const { title, body, assignees, labels } = issueBody;
+		const response = await this.client.request(
+			"POST /repos/{owner}/{repo}/issues",
+			{
+				owner,
+				repo,
+				title,
+				body,
+				assignees,
+				labels,
+				headers: {
+					"X-GitHub-Api-Version": "2022-11-28",
+				},
+			},
+		);
+		return new GitHubIssue({
+			...response.data,
+			body: response.data.body ?? "",
+		});
 	}
 }

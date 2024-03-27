@@ -109,3 +109,34 @@ describe("GitHubAPIClient.getWorkflowRuns()", () => {
 		expect(runs).toHaveProperty([1, "parameters", "id"], 4);
 	});
 });
+
+describe("GitHubAPIClient.createIssue()", () => {
+	afterEach(() => {
+		vi.restoreAllMocks();
+	});
+
+	it("should get workflow runs from GitHub", async () => {
+		const client = new GitHubAPIClient("token");
+		const spy = vi.spyOn(client.client, "request");
+		spy.mockResolvedValueOnce({
+			data: {
+				id: 234,
+				url: "https://github.com/yykamei/test-repo/issue/234",
+				number: 2340,
+				state: "open",
+				title: "test",
+				body: "body",
+			},
+			headers: vi.fn()(),
+			url: "https://example.com",
+			status: 200,
+		});
+
+		const issue = await client.createIssue("yykamei", "test-repo", {
+			title: "test",
+			body: "body",
+		});
+		expect(spy).toHaveBeenCalledTimes(1);
+		expect(issue).toHaveProperty("parameters");
+	});
+});

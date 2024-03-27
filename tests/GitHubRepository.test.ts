@@ -1,6 +1,7 @@
 import { describe, it } from "vitest";
-import type { APIClient } from "../src/APIClient";
+import type { APIClient, IssueBody } from "../src/APIClient";
 import { DateTime } from "../src/DateTime";
+import { GitHubIssue } from "../src/GitHubIssue";
 import { GitHubRepository } from "../src/GitHubRepository";
 import { GitHubWorkflow } from "../src/GitHubWorkflow";
 import { GitHubWorkflowRun } from "../src/GitHubWorkflowRun";
@@ -41,6 +42,20 @@ describe("GitHubRepository", () => {
 				}),
 			];
 		}
+		async createIssue(
+			_owner: string,
+			_repo: string,
+			_issueBody: IssueBody,
+		): Promise<GitHubIssue> {
+			return new GitHubIssue({
+				id: 234,
+				url: "https://github.com/yykamei/test-repo/issue/234",
+				number: 2340,
+				state: "open",
+				title: "test",
+				body: "body",
+			});
+		}
 	}
 
 	it("should call functions declared in APIClient", () => {
@@ -49,5 +64,6 @@ describe("GitHubRepository", () => {
 		repository.getWorkflows();
 		repository.getWorkflow("abc.yml");
 		repository.getWorkflowRuns(new GitHubWorkflow(8, "Eight", "eight.yml"));
+		repository.createIssue({ title: "t", body: "b" });
 	});
 });
