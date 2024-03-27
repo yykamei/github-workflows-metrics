@@ -29,3 +29,34 @@ describe("GitHubAPIClient.getWorkflow()", () => {
 		expect(workflow.path).toEqual("super-workflow.yml");
 	});
 });
+
+describe("GitHubAPIClient.getWorkflows()", () => {
+	afterEach(() => {
+		vi.restoreAllMocks();
+	});
+
+	it("should get workflow from GitHub", async () => {
+		const client = new GitHubAPIClient("token");
+		const spy = vi.spyOn(client.client, "request");
+		spy.mockResolvedValueOnce({
+			data: {
+				workflows: [
+					{ id: 3, name: "a", path: "a.yml" },
+					{ id: 47, name: "b", path: "b.yml" },
+				],
+			},
+			headers: vi.fn()(),
+			url: "https://example.com",
+			status: 200,
+		});
+
+		const workflows = await client.getWorkflows("yykamei", "test-repo");
+		expect(spy).toHaveBeenCalledTimes(1);
+		expect(workflows).toHaveProperty([0, "id"], 3);
+		expect(workflows).toHaveProperty([0, "name"], "a");
+		expect(workflows).toHaveProperty([0, "path"], "a.yml");
+		expect(workflows).toHaveProperty([1, "id"], 47);
+		expect(workflows).toHaveProperty([1, "name"], "b");
+		expect(workflows).toHaveProperty([1, "path"], "b.yml");
+	});
+});

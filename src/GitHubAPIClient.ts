@@ -29,4 +29,20 @@ export class GitHubAPIClient implements APIClient {
 		const { id, name } = response.data;
 		return new GitHubWorkflow(id, name, path);
 	}
+
+	async getWorkflows(owner: string, repo: string): Promise<GitHubWorkflow[]> {
+		const response = await this.client.request(
+			"GET /repos/{owner}/{repo}/actions/workflows",
+			{
+				owner,
+				repo,
+				headers: {
+					"X-GitHub-Api-Version": "2022-11-28",
+				},
+			},
+		);
+		return response.data.workflows.map(
+			(w) => new GitHubWorkflow(w.id, w.name, w.path),
+		);
+	}
 }

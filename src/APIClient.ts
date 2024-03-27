@@ -6,4 +6,6 @@ export interface APIClient {
 		repo: string,
 		path: string,
 	): Promise<GitHubWorkflow>;
+
+	getWorkflows(owner: string, repo: string): Promise<GitHubWorkflow[]>;
 }
