@@ -3,6 +3,7 @@ import { Duration } from "../src/Duration";
 
 describe("Duration.toHumanReadableFormat()", () => {
 	it("should return correct human-readable format string", () => {
+		expect(new Duration(883).milliseconds).toEqual(883);
 		expect(new Duration(338).toHumanReadableFormat()).toEqual("0s");
 		expect(new Duration(739).toHumanReadableFormat()).toEqual("1s");
 		expect(new Duration(8938).toHumanReadableFormat()).toEqual("9s");

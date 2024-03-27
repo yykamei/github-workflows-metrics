@@ -1,5 +1,5 @@
 export class Duration {
-	constructor(private readonly milliseconds: number) {}
+	constructor(public readonly milliseconds: number) {}
 
 	toHumanReadableFormat(): string {
 		const secondsPart = Math.round(this.milliseconds / 1000) % 60;
