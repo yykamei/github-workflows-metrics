@@ -1,0 +1,13 @@
+name: GitHub Workflow Metrics
+description: TODO
+inputs:
+  token:
+    description: The GitHub token used to create an authenticated client
+    required: false
+    default: ${{ github.token }}
+branding:
+  icon: stop-circle
+  color: yellow
+runs:
+  using: node20
+  main: dist/index.js
