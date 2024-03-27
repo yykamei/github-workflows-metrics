@@ -66,6 +66,12 @@ describe("DateTime", () => {
 		console.log(mermaidXYChart.visualize());
 		expect(mermaidXYChart.visualize()).toEqual(`
 \`\`\`mermaid
+---
+config:
+    xyChart:
+        yAxis:
+            titlePadding: 16
+---
 xychart-beta
     title "ABC (abc.yml)"
     x-axis "GitHub Workflow Run" [3,4,5,6,7,8,9,10,11]

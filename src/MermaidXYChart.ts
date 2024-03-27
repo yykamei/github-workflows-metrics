@@ -12,6 +12,12 @@ export class MermaidXYChart {
 		const seconds = this.runs.map((r) => r.duration.toSeconds());
 		return `
 \`\`\`mermaid
+---
+config:
+    xyChart:
+        yAxis:
+            titlePadding: 16
+---
 xychart-beta
     title "${this.workflow.name} (${this.workflow.path})"
     x-axis "GitHub Workflow Run" [${xAxis.join(",")}]
