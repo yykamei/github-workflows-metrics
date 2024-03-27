@@ -69,6 +69,8 @@ describe("DateTime", () => {
 ---
 config:
     xyChart:
+        xAxis:
+            labelPadding: 16
         yAxis:
             titlePadding: 16
 ---
