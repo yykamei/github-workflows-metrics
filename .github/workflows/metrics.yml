@@ -1,8 +1,9 @@
 name: GitHub Workflow Metrics
 on:
   workflow_dispatch:
-env:
-  ACTIONS_STEP_DEBUG: "true"
+permissions:
+  contents: read # actions/checkout requires this permission
+  actions: read
 jobs:
   ci:
     runs-on: ubuntu-latest
