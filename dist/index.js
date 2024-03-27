@@ -28987,6 +28987,7 @@ try {
     await (0,_main__WEBPACK_IMPORTED_MODULE_1__/* ["default"] */ .Z)();
 }
 catch (e) {
+    console.log(e);
     (0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.setFailed)(`Unhandled error: ${e}`);
 }
 
