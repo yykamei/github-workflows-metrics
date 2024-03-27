@@ -17,4 +17,8 @@ export class Duration {
 
 		return str;
 	}
+
+	toSeconds(): number {
+		return Math.round(this.milliseconds / 1000);
+	}
 }
