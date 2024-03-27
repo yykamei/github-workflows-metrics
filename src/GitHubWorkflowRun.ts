@@ -20,4 +20,8 @@ export class GitHubWorkflowRun {
 	get duration(): Duration {
 		return this.parameters.updatedAt.minus(this.parameters.createdAt);
 	}
+
+	get date(): Date {
+		return new Date(this.parameters.createdAt.value);
+	}
 }

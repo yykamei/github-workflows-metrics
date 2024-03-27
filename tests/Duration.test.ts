@@ -23,5 +23,5 @@ describe("Duration.toHumanReadableFormat()", () => {
 		expect(new Duration(3738806).toSeconds()).toEqual(3739);
 		expect(new Duration(3613206).toSeconds()).toEqual(3613);
 		expect(new Duration(7138206).toSeconds()).toEqual(7138);
-	})
+	});
 });
