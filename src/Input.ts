@@ -1,27 +1,25 @@
-import core, { type InputOptions } from "@actions/core";
-import github from "@actions/github";
+import { type InputOptions, getInput } from "@actions/core";
+import { context } from "@actions/github";
 import type { Context } from "@actions/github/lib/context";
 
 export class Input {
 	constructor(
-		private readonly context: Context = github.context,
-		private readonly getInput: (
+		private readonly ctx: Context = context,
+		private readonly getInputFn: (
 			name: string,
 			options?: InputOptions,
-		) => string = core.getInput,
-	) {
-		console.log(context);
-	}
+		) => string = getInput,
+	) {}
 
 	get owner(): string {
-		return this.context.repo.owner;
+		return this.ctx.repo.owner;
 	}
 
 	get repo(): string {
-		return this.context.repo.repo;
+		return this.ctx.repo.repo;
 	}
 
 	get token(): string {
-		return this.getInput("token", { required: true });
+		return this.getInputFn("token", { required: true });
 	}
 }

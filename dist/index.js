@@ -29007,7 +29007,6 @@ __nccwpck_require__.d(__webpack_exports__, {
 
 // EXTERNAL MODULE: ./node_modules/@actions/github/lib/github.js
 var github = __nccwpck_require__(5438);
-var github_default = /*#__PURE__*/__nccwpck_require__.n(github);
 ;// CONCATENATED MODULE: ./src/Duration.ts
 class Duration {
     milliseconds;
@@ -29177,26 +29176,24 @@ class GitHubRepository {
 
 // EXTERNAL MODULE: ./node_modules/@actions/core/lib/core.js
 var core = __nccwpck_require__(2186);
-var core_default = /*#__PURE__*/__nccwpck_require__.n(core);
 ;// CONCATENATED MODULE: ./src/Input.ts
 
 
 class Input {
-    context;
-    getInput;
-    constructor(context = (github_default()).context, getInput = (core_default()).getInput) {
-        this.context = context;
-        this.getInput = getInput;
-        console.log(context);
+    ctx;
+    getInputFn;
+    constructor(ctx = github.context, getInputFn = core.getInput) {
+        this.ctx = ctx;
+        this.getInputFn = getInputFn;
     }
     get owner() {
-        return this.context.repo.owner;
+        return this.ctx.repo.owner;
     }
     get repo() {
-        return this.context.repo.repo;
+        return this.ctx.repo.repo;
     }
     get token() {
-        return this.getInput("token", { required: true });
+        return this.getInputFn("token", { required: true });
     }
 }
 
