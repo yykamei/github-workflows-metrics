@@ -1,7 +1,9 @@
 import { getOctokit } from "@actions/github";
 import type { Octokit } from "@octokit/core";
 import type { APIClient } from "./APIClient";
+import { DateTime } from "./DateTime";
 import { GitHubWorkflow } from "./GitHubWorkflow";
+import { GitHubWorkflowRun } from "./GitHubWorkflowRun";
 
 export class GitHubAPIClient implements APIClient {
 	public readonly client: Octokit;
@@ -43,6 +45,36 @@ export class GitHubAPIClient implements APIClient {
 		);
 		return response.data.workflows.map(
 			(w) => new GitHubWorkflow(w.id, w.name, w.path),
+		);
+	}
+
+	async getWorkflowRuns(
+		owner: string,
+		repo: string,
+		workflowId: number,
+	): Promise<GitHubWorkflowRun[]> {
+		const response = await this.client.request(
+			"GET /repos/{owner}/{repo}/actions/workflows/{workflow_id}/runs",
+			{
+				owner,
+				repo,
+				workflow_id: workflowId,
+				headers: {
+					"X-GitHub-Api-Version": "2022-11-28",
+				},
+			},
+		);
+		return response.data.workflow_runs.map(
+			(r) =>
+				new GitHubWorkflowRun({
+					...r,
+					name: r.name ?? null,
+					workflowId: r.workflow_id,
+					runNumber: r.run_number,
+					displayTitle: r.display_title,
+					createdAt: new DateTime(r.created_at),
+					updatedAt: new DateTime(r.updated_at),
+				}),
 		);
 	}
 }
