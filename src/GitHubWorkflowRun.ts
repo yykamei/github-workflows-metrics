@@ -1,4 +1,5 @@
 import type { DateTime } from "./DateTime";
+import type { Duration } from "./Duration";
 
 type GitHubWorkflowRunParameters = {
 	readonly id: number;
@@ -15,4 +16,8 @@ type GitHubWorkflowRunParameters = {
 
 export class GitHubWorkflowRun {
 	constructor(public readonly parameters: GitHubWorkflowRunParameters) {}
+
+	get duration(): Duration {
+		return this.parameters.updatedAt.minus(this.parameters.createdAt);
+	}
 }
