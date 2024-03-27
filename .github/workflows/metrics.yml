@@ -1,0 +1,8 @@
+name: GitHub Workflow Metrics
+on:
+  workflow_dispatch:
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: yykamei/github-workflow-metrics@main
