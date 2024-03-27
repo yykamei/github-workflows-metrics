@@ -9,7 +9,9 @@ export class Input {
 			name: string,
 			options?: InputOptions,
 		) => string = core.getInput,
-	) {}
+	) {
+		console.log(context);
+	}
 
 	get owner(): string {
 		return this.context.repo.owner;

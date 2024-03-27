@@ -29187,6 +29187,7 @@ class Input {
     constructor(context = (github_default()).context, getInput = (core_default()).getInput) {
         this.context = context;
         this.getInput = getInput;
+        console.log(context);
     }
     get owner() {
         return this.context.repo.owner;
