@@ -4,6 +4,7 @@ on:
 permissions:
   contents: read # actions/checkout requires this permission
   actions: read
+  issues: write
 jobs:
   ci:
     runs-on: ubuntu-latest
