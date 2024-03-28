@@ -8,7 +8,7 @@ import type { GitHubIssueContent } from "./GitHubIssueContent";
 import { GitHubWorkflow } from "./GitHubWorkflow";
 import { GitHubWorkflowRun } from "./GitHubWorkflowRun";
 
-const GITHUB_LINK_REGEXP = /rel="next"/;
+const GITHUB_LINK_REL_REXT = 'rel="next"';
 
 export class GitHubAPIClient implements APIClient {
 	public readonly client: Octokit;
@@ -41,7 +41,7 @@ export class GitHubAPIClient implements APIClient {
 		let page = 1;
 		let link = "";
 		let workflows: GitHubWorkflow[] = [];
-		while (page === 1 || GITHUB_LINK_REGEXP.test(link)) {
+		while (page === 1 || link.includes(GITHUB_LINK_REL_REXT)) {
 			debug(`Fetching workflows page ${page}`);
 			const response = await this.client.request(
 				"GET /repos/{owner}/{repo}/actions/workflows",

@@ -60,6 +60,35 @@ describe("GitHubAPIClient.getWorkflows()", () => {
 		expect(workflows).toHaveProperty([1, "name"], "b");
 		expect(workflows).toHaveProperty([1, "path"], "b.yml");
 	});
+
+	it("should call GitHub API twice", async () => {
+		const client = new GitHubAPIClient("token");
+		const spy = vi.spyOn(client.client, "request");
+		spy.mockResolvedValueOnce({
+			data: {
+				workflows: [
+					{ id: 3, name: "a", path: "a.yml" },
+					{ id: 47, name: "b", path: "b.yml" },
+				],
+			},
+			headers: { link: 'https://example.com/; rel="next"' },
+			url: "https://example.com",
+			status: 200,
+		});
+		spy.mockResolvedValueOnce({
+			data: {
+				workflows: [{ id: 8, name: "c", path: "c.yml" }],
+			},
+			headers: {},
+			url: "https://example.com",
+			status: 200,
+		});
+
+		const workflows = await client.getWorkflows("yykamei", "test-repo");
+		expect(spy).toHaveBeenCalledTimes(2);
+		expect(workflows.length).toEqual(3);
+		expect(workflows.map((w) => w.id)).toEqual([3, 47, 8]);
+	});
 });
 
 describe("GitHubAPIClient.getWorkflowRuns()", () => {

@@ -29088,7 +29088,7 @@ class GitHubWorkflowRun {
 
 
 
-const GITHUB_LINK_REGEXP = /rel="next"/;
+const GITHUB_LINK_REL_REXT = 'rel="next"';
 class GitHubAPIClient {
     client;
     constructor(token) {
@@ -29110,7 +29110,7 @@ class GitHubAPIClient {
         let page = 1;
         let link = "";
         let workflows = [];
-        while (page === 1 || GITHUB_LINK_REGEXP.test(link)) {
+        while (page === 1 || link.includes(GITHUB_LINK_REL_REXT)) {
             (0,core.debug)(`Fetching workflows page ${page}`);
             const response = await this.client.request("GET /repos/{owner}/{repo}/actions/workflows", {
                 owner,
