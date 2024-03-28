@@ -29103,14 +29103,12 @@ class GitHubAPIClient {
         return new GitHubWorkflow(id, name, path);
     }
     async getWorkflows(owner, repo) {
-        // @ts-ignore
-        const response = await this.client.paginate("GET /repos/{owner}/{repo}/actions/workflows", {
+        const response = await this.client.request("GET /repos/{owner}/{repo}/actions/workflows", {
             owner,
             repo,
             headers: {
                 "X-GitHub-Api-Version": "2022-11-28",
             },
-            per_page: 100,
         });
         return response.data.workflows.map((w) => new GitHubWorkflow(w.id, w.name, w.path));
     }

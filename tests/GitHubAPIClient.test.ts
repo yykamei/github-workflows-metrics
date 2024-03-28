@@ -38,9 +38,7 @@ describe("GitHubAPIClient.getWorkflows()", () => {
 
 	it("should get workflows from GitHub", async () => {
 		const client = new GitHubAPIClient("token");
-		// @ts-ignore
-		const spy = vi.spyOn(client.client, "paginate");
-		// @ts-ignore
+		const spy = vi.spyOn(client.client, "request");
 		spy.mockResolvedValueOnce({
 			data: {
 				workflows: [

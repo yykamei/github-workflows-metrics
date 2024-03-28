@@ -35,8 +35,7 @@ export class GitHubAPIClient implements APIClient {
 	}
 
 	async getWorkflows(owner: string, repo: string): Promise<GitHubWorkflow[]> {
-		// @ts-ignore
-		const response = await this.client.paginate(
+		const response = await this.client.request(
 			"GET /repos/{owner}/{repo}/actions/workflows",
 			{
 				owner,
@@ -44,12 +43,10 @@ export class GitHubAPIClient implements APIClient {
 				headers: {
 					"X-GitHub-Api-Version": "2022-11-28",
 				},
-				per_page: 100,
 			},
 		);
 		return response.data.workflows.map(
-			(w: { id: number; name: string; path: string }) =>
-				new GitHubWorkflow(w.id, w.name, w.path),
+			(w) => new GitHubWorkflow(w.id, w.name, w.path),
 		);
 	}
 
