@@ -111,6 +111,27 @@ export class GitHubAPIClient implements APIClient {
 		return runs;
 	}
 
+	async getIssues(
+		owner: string,
+		repo: string,
+		labels: string[],
+	): Promise<GitHubIssue[]> {
+		const response = await this.client.request(
+			"GET /repos/{owner}/{repo}/issues",
+			{
+				owner,
+				repo,
+				labels: labels.join(","),
+				headers: {
+					"X-GitHub-Api-Version": "2022-11-28",
+				},
+			},
+		);
+		return response.data.map((d) => {
+			return new GitHubIssue({ ...d, body: d.body ?? "" });
+		});
+	}
+
 	async createIssue(
 		owner: string,
 		repo: string,

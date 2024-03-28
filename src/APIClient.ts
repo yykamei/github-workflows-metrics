@@ -15,7 +15,11 @@ export interface APIClient {
 		repo: string,
 		workflowId: number,
 	): Promise<GitHubWorkflowRun[]>;
-
+	getIssues(
+		owner: string,
+		repo: string,
+		labels: string[],
+	): Promise<GitHubIssue[]>;
 	createIssue(
 		owner: string,
 		repo: string,

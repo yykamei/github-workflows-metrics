@@ -174,6 +174,36 @@ describe("GitHubAPIClient.getWorkflowRuns()", () => {
 	});
 });
 
+describe("GitHubAPIClient.getIssues()", () => {
+	afterEach(() => {
+		vi.restoreAllMocks();
+	});
+
+	it("should get issues from GitHub", async () => {
+		const client = new GitHubAPIClient("token");
+		const spy = vi.spyOn(client.client, "request");
+		spy.mockResolvedValueOnce({
+			data: [
+				{
+					id: 234,
+					url: "https://github.com/yykamei/test-repo/issue/234",
+					number: 2340,
+					state: "open",
+					title: "test",
+					body: "body",
+				},
+			],
+			headers: {},
+			url: "https://example.com",
+			status: 200,
+		});
+
+		const issues = await client.getIssues("yykamei", "test-repo", ["label"]);
+		expect(spy).toHaveBeenCalledTimes(1);
+		expect(issues).toHaveProperty([0, "parameters"]);
+	});
+});
+
 describe("GitHubAPIClient.createIssue()", () => {
 	afterEach(() => {
 		vi.restoreAllMocks();

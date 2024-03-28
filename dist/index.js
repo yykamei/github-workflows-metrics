@@ -29163,6 +29163,19 @@ class GitHubAPIClient {
         }
         return runs;
     }
+    async getIssues(owner, repo, labels) {
+        const response = await this.client.request("GET /repos/{owner}/{repo}/issues", {
+            owner,
+            repo,
+            labels: labels.join(","),
+            headers: {
+                "X-GitHub-Api-Version": "2022-11-28",
+            },
+        });
+        return response.data.map((d) => {
+            return new GitHubIssue({ ...d, body: d.body ?? "" });
+        });
+    }
     async createIssue(owner, repo, issueContent) {
         const { title, body, assignees, labels } = issueContent;
         const response = await this.client.request("POST /repos/{owner}/{repo}/issues", {
@@ -29236,6 +29249,9 @@ class GitHubRepository {
     }
     async getWorkflowRuns(workflow) {
         return this.apiClient.getWorkflowRuns(this.owner, this.repo, workflow.id);
+    }
+    async getIssues(labels) {
+        return this.apiClient.getIssues(this.owner, this.repo, labels);
     }
     async createIssue(issueContent) {
         return this.apiClient.createIssue(this.owner, this.repo, issueContent);

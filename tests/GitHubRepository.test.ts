@@ -12,6 +12,7 @@ describe("GitHubRepository", () => {
 		repository.getWorkflows();
 		repository.getWorkflow("abc.yml");
 		repository.getWorkflowRuns(new GitHubWorkflow(8, "Eight", "eight.yml"));
+		repository.getIssues([]);
 		repository.createIssue(new GitHubIssueContent([], "title"));
 		repository.closeIssue(
 			new GitHubIssue({
