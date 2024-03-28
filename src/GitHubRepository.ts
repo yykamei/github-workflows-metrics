@@ -28,4 +28,7 @@ export class GitHubRepository {
 	async createIssue(issueContent: GitHubIssueContent): Promise<GitHubIssue> {
 		return this.apiClient.createIssue(this.owner, this.repo, issueContent);
 	}
+	async closeIssue(issue: GitHubIssue): Promise<GitHubIssue> {
+		return this.apiClient.closeIssue(this.owner, this.repo, issue);
+	}
 }

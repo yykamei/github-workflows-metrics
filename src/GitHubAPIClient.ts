@@ -136,4 +136,26 @@ export class GitHubAPIClient implements APIClient {
 			body: response.data.body ?? "",
 		});
 	}
+	async closeIssue(
+		owner: string,
+		repo: string,
+		issue: GitHubIssue,
+	): Promise<GitHubIssue> {
+		const response = await this.client.request(
+			"PATCH /repos/{owner}/{repo}/issues/{issue_number}",
+			{
+				owner,
+				repo,
+				issue_number: issue.parameters.number,
+				state: "closed",
+				headers: {
+					"X-GitHub-Api-Version": "2022-11-28",
+				},
+			},
+		);
+		return new GitHubIssue({
+			...response.data,
+			body: response.data.body ?? "",
+		});
+	}
 }

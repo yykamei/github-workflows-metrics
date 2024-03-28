@@ -21,4 +21,9 @@ export interface APIClient {
 		repo: string,
 		issueContent: GitHubIssueContent,
 	): Promise<GitHubIssue>;
+	closeIssue(
+		owner: string,
+		repo: string,
+		issue: GitHubIssue,
+	): Promise<GitHubIssue>;
 }

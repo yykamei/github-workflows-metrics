@@ -51,4 +51,19 @@ export class TestClient implements APIClient {
 			body: "body",
 		});
 	}
+
+	async closeIssue(
+		_owner: string,
+		_repo: string,
+		_issue: GitHubIssue,
+	): Promise<GitHubIssue> {
+		return new GitHubIssue({
+			id: 234,
+			url: "https://github.com/yykamei/test-repo/issue/234",
+			number: 2340,
+			state: "open",
+			title: "test",
+			body: "body",
+		});
+	}
 }

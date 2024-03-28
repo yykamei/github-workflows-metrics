@@ -29181,6 +29181,21 @@ class GitHubAPIClient {
             body: response.data.body ?? "",
         });
     }
+    async closeIssue(owner, repo, issue) {
+        const response = await this.client.request("PATCH /repos/{owner}/{repo}/issues/{issue_number}", {
+            owner,
+            repo,
+            issue_number: issue.parameters.number,
+            state: "closed",
+            headers: {
+                "X-GitHub-Api-Version": "2022-11-28",
+            },
+        });
+        return new GitHubIssue({
+            ...response.data,
+            body: response.data.body ?? "",
+        });
+    }
 }
 
 ;// CONCATENATED MODULE: ./src/GitHubIssueContent.ts
@@ -29224,6 +29239,9 @@ class GitHubRepository {
     }
     async createIssue(issueContent) {
         return this.apiClient.createIssue(this.owner, this.repo, issueContent);
+    }
+    async closeIssue(issue) {
+        return this.apiClient.closeIssue(this.owner, this.repo, issue);
     }
 }
 

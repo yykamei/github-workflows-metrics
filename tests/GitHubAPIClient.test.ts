@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { GitHubAPIClient } from "../src/GitHubAPIClient";
+import { GitHubIssue } from "../src/GitHubIssue";
 import { GitHubIssueContent } from "../src/GitHubIssueContent";
 import { GitHubWorkflow } from "../src/GitHubWorkflow";
 
@@ -199,6 +200,44 @@ describe("GitHubAPIClient.createIssue()", () => {
 			"yykamei",
 			"test-repo",
 			new GitHubIssueContent([], "test"),
+		);
+		expect(spy).toHaveBeenCalledTimes(1);
+		expect(issue).toHaveProperty("parameters");
+	});
+});
+describe("GitHubAPIClient.closeIssue()", () => {
+	afterEach(() => {
+		vi.restoreAllMocks();
+	});
+
+	it("should close an issue on GitHub", async () => {
+		const client = new GitHubAPIClient("token");
+		const spy = vi.spyOn(client.client, "request");
+		spy.mockResolvedValueOnce({
+			data: {
+				id: 234,
+				url: "https://github.com/yykamei/test-repo/issue/234",
+				number: 2340,
+				state: "closed",
+				title: "test",
+				body: "body",
+			},
+			headers: {},
+			url: "https://example.com",
+			status: 200,
+		});
+
+		const issue = await client.closeIssue(
+			"yykamei",
+			"test-repo",
+			new GitHubIssue({
+				id: 234,
+				url: "https://github.com/yykamei/test-repo/issue/234",
+				number: 2340,
+				state: "closed",
+				title: "test",
+				body: "body",
+			}),
 		);
 		expect(spy).toHaveBeenCalledTimes(1);
 		expect(issue).toHaveProperty("parameters");
