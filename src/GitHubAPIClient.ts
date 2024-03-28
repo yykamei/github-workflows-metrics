@@ -1,3 +1,4 @@
+import { debug } from "@actions/core";
 import { getOctokit } from "@actions/github";
 import type { Octokit } from "@octokit/core";
 import type { APIClient } from "./APIClient";
@@ -6,6 +7,8 @@ import { GitHubIssue } from "./GitHubIssue";
 import type { GitHubIssueContent } from "./GitHubIssueContent";
 import { GitHubWorkflow } from "./GitHubWorkflow";
 import { GitHubWorkflowRun } from "./GitHubWorkflowRun";
+
+const GITHUB_LINK_REGEXP = /rel="next"/;
 
 export class GitHubAPIClient implements APIClient {
 	public readonly client: Octokit;
@@ -35,19 +38,33 @@ export class GitHubAPIClient implements APIClient {
 	}
 
 	async getWorkflows(owner: string, repo: string): Promise<GitHubWorkflow[]> {
-		const response = await this.client.request(
-			"GET /repos/{owner}/{repo}/actions/workflows",
-			{
-				owner,
-				repo,
-				headers: {
-					"X-GitHub-Api-Version": "2022-11-28",
+		let page = 1;
+		let link = "";
+		let workflows: GitHubWorkflow[] = [];
+		while (page === 1 || GITHUB_LINK_REGEXP.test(link)) {
+			debug(`Fetching workflows page ${page}`);
+			const response = await this.client.request(
+				"GET /repos/{owner}/{repo}/actions/workflows",
+				{
+					owner,
+					repo,
+					headers: {
+						"X-GitHub-Api-Version": "2022-11-28",
+					},
+					per_page: 100,
+					page,
 				},
-			},
-		);
-		return response.data.workflows.map(
-			(w) => new GitHubWorkflow(w.id, w.name, w.path),
-		);
+			);
+			link = response.headers.link || "";
+			page += 1;
+			workflows = [
+				...workflows,
+				...response.data.workflows.map(
+					(w) => new GitHubWorkflow(w.id, w.name, w.path),
+				),
+			];
+		}
+		return workflows;
 	}
 
 	async getWorkflowRuns(

@@ -29006,6 +29006,8 @@ __nccwpck_require__.d(__webpack_exports__, {
   "Z": () => (/* binding */ src_main)
 });
 
+// EXTERNAL MODULE: ./node_modules/@actions/core/lib/core.js
+var core = __nccwpck_require__(2186);
 // EXTERNAL MODULE: ./node_modules/@actions/github/lib/github.js
 var github = __nccwpck_require__(5438);
 ;// CONCATENATED MODULE: ./src/Duration.ts
@@ -29085,6 +29087,8 @@ class GitHubWorkflowRun {
 
 
 
+
+const GITHUB_LINK_REGEXP = /rel="next"/;
 class GitHubAPIClient {
     client;
     constructor(token) {
@@ -29103,14 +29107,28 @@ class GitHubAPIClient {
         return new GitHubWorkflow(id, name, path);
     }
     async getWorkflows(owner, repo) {
-        const response = await this.client.request("GET /repos/{owner}/{repo}/actions/workflows", {
-            owner,
-            repo,
-            headers: {
-                "X-GitHub-Api-Version": "2022-11-28",
-            },
-        });
-        return response.data.workflows.map((w) => new GitHubWorkflow(w.id, w.name, w.path));
+        let page = 1;
+        let link = "";
+        let workflows = [];
+        while (page === 1 || GITHUB_LINK_REGEXP.test(link)) {
+            (0,core.debug)(`Fetching workflows page ${page}`);
+            const response = await this.client.request("GET /repos/{owner}/{repo}/actions/workflows", {
+                owner,
+                repo,
+                headers: {
+                    "X-GitHub-Api-Version": "2022-11-28",
+                },
+                per_page: 100,
+                page,
+            });
+            link = response.headers.link || "";
+            page += 1;
+            workflows = [
+                ...workflows,
+                ...response.data.workflows.map((w) => new GitHubWorkflow(w.id, w.name, w.path)),
+            ];
+        }
+        return workflows;
     }
     async getWorkflowRuns(owner, repo, workflowId) {
         const response = await this.client.request("GET /repos/{owner}/{repo}/actions/workflows/{workflow_id}/runs", {
@@ -29195,8 +29213,6 @@ class GitHubRepository {
     }
 }
 
-// EXTERNAL MODULE: ./node_modules/@actions/core/lib/core.js
-var core = __nccwpck_require__(2186);
 ;// CONCATENATED MODULE: ./src/Input.ts
 
 

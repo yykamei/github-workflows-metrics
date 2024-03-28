@@ -46,7 +46,7 @@ describe("GitHubAPIClient.getWorkflows()", () => {
 					{ id: 47, name: "b", path: "b.yml" },
 				],
 			},
-			headers: vi.fn()(),
+			headers: {},
 			url: "https://example.com",
 			status: 200,
 		});
