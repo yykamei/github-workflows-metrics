@@ -22,6 +22,9 @@ const main = async () => {
 		[],
 		[input.label],
 	);
+	for (const issue of await repository.getIssues([input.label])) {
+		await repository.closeIssue(issue);
+	}
 	await repository.createIssue(issueContent);
 };
 

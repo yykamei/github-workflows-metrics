@@ -29334,6 +29334,9 @@ const main = async () => {
         return new MermaidXYChart(w, runs);
     }));
     const issueContent = new GitHubIssueContent(charts, `GitHub Workflow Metrics on ${now.toDateString()}`, [], [input.label]);
+    for (const issue of await repository.getIssues([input.label])) {
+        await repository.closeIssue(issue);
+    }
     await repository.createIssue(issueContent);
 };
 /* harmony default export */ const src_main = (main);
