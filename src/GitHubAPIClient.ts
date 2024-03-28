@@ -72,29 +72,43 @@ export class GitHubAPIClient implements APIClient {
 		repo: string,
 		workflowId: number,
 	): Promise<GitHubWorkflowRun[]> {
-		const response = await this.client.request(
-			"GET /repos/{owner}/{repo}/actions/workflows/{workflow_id}/runs",
-			{
-				owner,
-				repo,
-				workflow_id: workflowId,
-				headers: {
-					"X-GitHub-Api-Version": "2022-11-28",
+		let page = 1;
+		let link = "";
+		let runs: GitHubWorkflowRun[] = [];
+		while (page === 1 || (page <= 5 && link.includes(GITHUB_LINK_REL_REXT))) {
+			debug(`Fetching runs page ${page}`);
+			const response = await this.client.request(
+				"GET /repos/{owner}/{repo}/actions/workflows/{workflow_id}/runs",
+				{
+					owner,
+					repo,
+					workflow_id: workflowId,
+					headers: {
+						"X-GitHub-Api-Version": "2022-11-28",
+					},
+					per_page: 100,
+					page,
 				},
-			},
-		);
-		return response.data.workflow_runs.map(
-			(r) =>
-				new GitHubWorkflowRun({
-					...r,
-					name: r.name ?? null,
-					workflowId: r.workflow_id,
-					runNumber: r.run_number,
-					displayTitle: r.display_title,
-					createdAt: new DateTime(r.created_at),
-					updatedAt: new DateTime(r.updated_at),
-				}),
-		);
+			);
+			link = response.headers.link || "";
+			page += 1;
+			runs = [
+				...runs,
+				...response.data.workflow_runs.map(
+					(r) =>
+						new GitHubWorkflowRun({
+							...r,
+							name: r.name ?? null,
+							workflowId: r.workflow_id,
+							runNumber: r.run_number,
+							displayTitle: r.display_title,
+							createdAt: new DateTime(r.created_at),
+							updatedAt: new DateTime(r.updated_at),
+						}),
+				),
+			];
+		}
+		return runs;
 	}
 
 	async createIssue(

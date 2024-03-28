@@ -13,7 +13,7 @@ describe("GitHubAPIClient.getWorkflow()", () => {
 		const spy = vi.spyOn(client.client, "request");
 		spy.mockResolvedValueOnce({
 			data: { id: 8123, name: "CI" },
-			headers: vi.fn()(),
+			headers: {},
 			url: "https://example.com",
 			status: 200,
 		});
@@ -128,7 +128,7 @@ describe("GitHubAPIClient.getWorkflowRuns()", () => {
 					},
 				],
 			},
-			headers: vi.fn()(),
+			headers: {},
 			url: "https://example.com",
 			status: 200,
 		});
@@ -137,6 +137,39 @@ describe("GitHubAPIClient.getWorkflowRuns()", () => {
 		expect(spy).toHaveBeenCalledTimes(1);
 		expect(runs).toHaveProperty([0, "parameters", "id"], 3);
 		expect(runs).toHaveProperty([1, "parameters", "id"], 4);
+	});
+
+	it("should call GitHub API five times", async () => {
+		const client = new GitHubAPIClient("token");
+		const spy = vi.spyOn(client.client, "request");
+		for (const id of [4, 5, 6, 7, 8, 9, 10]) {
+			spy.mockResolvedValueOnce({
+				data: {
+					workflow_runs: [
+						{
+							id,
+							run_number: 39,
+							name: `Run ${id}`,
+							display_title: `Run ${id}!!`,
+							path: `run${id}.yml`,
+							event: "push",
+							conclusion: "success",
+							workflow_id: 34,
+							created_at: "2024-02-24T13:27:11Z",
+							updated_at: "2024-02-24T13:27:53Z",
+						},
+					],
+				},
+				headers: { link: 'rel="next"' },
+				url: "https://example.com",
+				status: 200,
+			});
+		}
+
+		const runs = await client.getWorkflowRuns("yykamei", "test-repo", 34);
+		expect(spy).toHaveBeenCalledTimes(5);
+		expect(runs.length).toEqual(5);
+		expect(runs.map((r) => r.parameters.id)).toEqual([4, 5, 6, 7, 8]);
 	});
 });
 
@@ -157,7 +190,7 @@ describe("GitHubAPIClient.createIssue()", () => {
 				title: "test",
 				body: "body",
 			},
-			headers: vi.fn()(),
+			headers: {},
 			url: "https://example.com",
 			status: 200,
 		});
