@@ -1,6 +1,10 @@
 name: GitHub Workflow Metrics
 description: TODO
 inputs:
+  label:
+    description: The label for GitHub issues that the GitHub Action creates
+    required: false
+    default: github-workflows-metrics
   token:
     description: The GitHub token used to create an authenticated client
     required: false

@@ -19,6 +19,10 @@ export class Input {
 		return this.ctx.repo.repo;
 	}
 
+	get label(): string {
+		return this.getInputFn("label");
+	}
+
 	get token(): string {
 		return this.getInputFn("token", { required: true });
 	}

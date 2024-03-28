@@ -19,6 +19,8 @@ const main = async () => {
 	const issueContent = new GitHubIssueContent(
 		charts,
 		`GitHub Workflow Metrics on ${now.toDateString()}`,
+		[],
+		[input.label],
 	);
 	await repository.createIssue(issueContent);
 };

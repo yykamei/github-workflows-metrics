@@ -29243,6 +29243,9 @@ class Input {
     get repo() {
         return this.ctx.repo.repo;
     }
+    get label() {
+        return this.getInputFn("label");
+    }
     get token() {
         return this.getInputFn("token", { required: true });
     }
@@ -29296,7 +29299,7 @@ const main = async () => {
         const runs = await repository.getWorkflowRuns(w);
         return new MermaidXYChart(w, runs);
     }));
-    const issueContent = new GitHubIssueContent(charts, `GitHub Workflow Metrics on ${now.toDateString()}`);
+    const issueContent = new GitHubIssueContent(charts, `GitHub Workflow Metrics on ${now.toDateString()}`, [], [input.label]);
     await repository.createIssue(issueContent);
 };
 /* harmony default export */ const src_main = (main);
