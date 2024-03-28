@@ -1,6 +1,10 @@
 name: GitHub Workflow Metrics
 description: TODO
 inputs:
+  only:
+    description: Only the specified workflows will be measured. This is supposed to be comma-separated list
+    required: false
+    default: ""
   label:
     description: The label for GitHub issues that the GitHub Action creates
     required: false

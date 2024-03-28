@@ -11,8 +11,14 @@ export class GitHubRepository {
 		private readonly apiClient: APIClient,
 	) {}
 
-	async getWorkflows(): Promise<GitHubWorkflow[]> {
-		return this.apiClient.getWorkflows(this.owner, this.repo);
+	async getWorkflows(only?: string[] | null): Promise<GitHubWorkflow[]> {
+		const workflows = await this.apiClient.getWorkflows(this.owner, this.repo);
+		if (only) {
+			return workflows.filter((w) => {
+				return only.some((o) => w.path.endsWith(o));
+			});
+		}
+		return workflows;
 	}
 
 	async getWorkflow(path: string): Promise<GitHubWorkflow> {

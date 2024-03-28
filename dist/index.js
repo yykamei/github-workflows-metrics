@@ -29241,8 +29241,14 @@ class GitHubRepository {
         this.repo = repo;
         this.apiClient = apiClient;
     }
-    async getWorkflows() {
-        return this.apiClient.getWorkflows(this.owner, this.repo);
+    async getWorkflows(only) {
+        const workflows = await this.apiClient.getWorkflows(this.owner, this.repo);
+        if (only) {
+            return workflows.filter((w) => {
+                return only.some((o) => w.path.endsWith(o));
+            });
+        }
+        return workflows;
     }
     async getWorkflow(path) {
         return this.apiClient.getWorkflow(this.owner, this.repo, path);
@@ -29279,6 +29285,13 @@ class Input {
     }
     get label() {
         return this.getInputFn("label");
+    }
+    get only() {
+        const only = this.getInputFn("only");
+        if (only.length === 0) {
+            return null;
+        }
+        return only.split(/\s*,\s*/);
     }
     get token() {
         return this.getInputFn("token", { required: true });
@@ -29328,7 +29341,7 @@ const main = async () => {
     const input = new Input();
     const apiClient = new GitHubAPIClient(input.token);
     const repository = new GitHubRepository(input.owner, input.repo, apiClient);
-    const workflows = await repository.getWorkflows();
+    const workflows = await repository.getWorkflows(input.only);
     const charts = await Promise.all(workflows.map(async (w) => {
         const runs = await repository.getWorkflowRuns(w);
         return new MermaidXYChart(w, runs);

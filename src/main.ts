@@ -9,7 +9,7 @@ const main = async () => {
 	const input = new Input();
 	const apiClient = new GitHubAPIClient(input.token);
 	const repository = new GitHubRepository(input.owner, input.repo, apiClient);
-	const workflows = await repository.getWorkflows();
+	const workflows = await repository.getWorkflows(input.only);
 	const charts = await Promise.all(
 		workflows.map(async (w) => {
 			const runs = await repository.getWorkflowRuns(w);

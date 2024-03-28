@@ -23,6 +23,14 @@ export class Input {
 		return this.getInputFn("label");
 	}
 
+	get only(): string[] | null {
+		const only = this.getInputFn("only");
+		if (only.length === 0) {
+			return null;
+		}
+		return only.split(/\s*,\s*/);
+	}
+
 	get token(): string {
 		return this.getInputFn("token", { required: true });
 	}

@@ -7,7 +7,10 @@ import { GitHubWorkflowRun } from "./GitHubWorkflowRun";
 
 export class TestClient implements APIClient {
 	async getWorkflows(_owner: string, _repo: string): Promise<GitHubWorkflow[]> {
-		return [new GitHubWorkflow(1234, "My Workflow", "my_workflow.yml")];
+		return [
+			new GitHubWorkflow(1234, "My Workflow", "my_workflow.yml"),
+			new GitHubWorkflow(1235, "XYZ", "xyz.yml"),
+		];
 	}
 	async getWorkflow(
 		_owner: string,
