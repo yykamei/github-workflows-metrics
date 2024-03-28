@@ -1,8 +1,9 @@
 import { getOctokit } from "@actions/github";
 import type { Octokit } from "@octokit/core";
-import type { APIClient, IssueBody } from "./APIClient";
+import type { APIClient } from "./APIClient";
 import { DateTime } from "./DateTime";
 import { GitHubIssue } from "./GitHubIssue";
+import type { GitHubIssueContent } from "./GitHubIssueContent";
 import { GitHubWorkflow } from "./GitHubWorkflow";
 import { GitHubWorkflowRun } from "./GitHubWorkflowRun";
 
@@ -82,9 +83,9 @@ export class GitHubAPIClient implements APIClient {
 	async createIssue(
 		owner: string,
 		repo: string,
-		issueBody: IssueBody,
+		issueContent: GitHubIssueContent,
 	): Promise<GitHubIssue> {
-		const { title, body, assignees, labels } = issueBody;
+		const { title, body, assignees, labels } = issueContent;
 		const response = await this.client.request(
 			"POST /repos/{owner}/{repo}/issues",
 			{

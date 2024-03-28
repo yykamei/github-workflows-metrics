@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { GitHubAPIClient } from "../src/GitHubAPIClient";
+import { GitHubIssueContent } from "../src/GitHubIssueContent";
 import { GitHubWorkflow } from "../src/GitHubWorkflow";
 
 describe("GitHubAPIClient.getWorkflow()", () => {
@@ -132,10 +133,11 @@ describe("GitHubAPIClient.createIssue()", () => {
 			status: 200,
 		});
 
-		const issue = await client.createIssue("yykamei", "test-repo", {
-			title: "test",
-			body: "body",
-		});
+		const issue = await client.createIssue(
+			"yykamei",
+			"test-repo",
+			new GitHubIssueContent([], "test"),
+		);
 		expect(spy).toHaveBeenCalledTimes(1);
 		expect(issue).toHaveProperty("parameters");
 	});

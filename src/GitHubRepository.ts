@@ -1,5 +1,6 @@
-import type { APIClient, IssueBody } from "./APIClient";
+import type { APIClient } from "./APIClient";
 import type { GitHubIssue } from "./GitHubIssue";
+import type { GitHubIssueContent } from "./GitHubIssueContent";
 import type { GitHubWorkflow } from "./GitHubWorkflow";
 import type { GitHubWorkflowRun } from "./GitHubWorkflowRun";
 
@@ -24,7 +25,7 @@ export class GitHubRepository {
 		return this.apiClient.getWorkflowRuns(this.owner, this.repo, workflow.id);
 	}
 
-	async createIssue(issueBody: IssueBody): Promise<GitHubIssue> {
-		return this.apiClient.createIssue(this.owner, this.repo, issueBody);
+	async createIssue(issueContent: GitHubIssueContent): Promise<GitHubIssue> {
+		return this.apiClient.createIssue(this.owner, this.repo, issueContent);
 	}
 }

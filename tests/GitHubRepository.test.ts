@@ -1,4 +1,5 @@
 import { describe, it } from "vitest";
+import { GitHubIssueContent } from "../src/GitHubIssueContent";
 import { GitHubRepository } from "../src/GitHubRepository";
 import { GitHubWorkflow } from "../src/GitHubWorkflow";
 import { TestClient } from "../src/TestClient";
@@ -10,6 +11,6 @@ describe("GitHubRepository", () => {
 		repository.getWorkflows();
 		repository.getWorkflow("abc.yml");
 		repository.getWorkflowRuns(new GitHubWorkflow(8, "Eight", "eight.yml"));
-		repository.createIssue({ title: "t", body: "b" });
+		repository.createIssue(new GitHubIssueContent([], "title"));
 	});
 });

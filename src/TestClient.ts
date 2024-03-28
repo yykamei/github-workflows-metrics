@@ -1,6 +1,7 @@
-import type { APIClient, IssueBody } from "./APIClient";
+import type { APIClient } from "./APIClient";
 import { DateTime } from "./DateTime";
 import { GitHubIssue } from "./GitHubIssue";
+import type { GitHubIssueContent } from "./GitHubIssueContent";
 import { GitHubWorkflow } from "./GitHubWorkflow";
 import { GitHubWorkflowRun } from "./GitHubWorkflowRun";
 
@@ -39,7 +40,7 @@ export class TestClient implements APIClient {
 	async createIssue(
 		_owner: string,
 		_repo: string,
-		_issueBody: IssueBody,
+		_issueContent: GitHubIssueContent,
 	): Promise<GitHubIssue> {
 		return new GitHubIssue({
 			id: 234,
