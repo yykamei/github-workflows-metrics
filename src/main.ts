@@ -1,9 +1,11 @@
 import { GitHubAPIClient } from "./GitHubAPIClient";
+import { GitHubIssueContent } from "./GitHubIssueContent";
 import { GitHubRepository } from "./GitHubRepository";
 import { Input } from "./Input";
 import { MermaidXYChart } from "./MermaidXYChart";
 
 const main = async () => {
+	const now = new Date();
 	const input = new Input();
 	const apiClient = new GitHubAPIClient(input.token);
 	const repository = new GitHubRepository(input.owner, input.repo, apiClient);
@@ -14,9 +16,11 @@ const main = async () => {
 			return new MermaidXYChart(w, runs);
 		}),
 	);
-	for (const c of charts) {
-		console.log(c.visualize());
-	}
+	const issueContent = new GitHubIssueContent(
+		charts,
+		`GitHub Workflow Metrics on ${now.toDateString()}`,
+	);
+	await repository.createIssue(issueContent);
 };
 
 export default main;
