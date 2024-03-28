@@ -4,6 +4,8 @@ export class GitHubIssueContent {
 	constructor(
 		private readonly charts: MermaidXYChart[],
 		public readonly title: string,
+		public readonly assignees?: string[],
+		public readonly labels?: string[],
 	) {}
 
 	get body(): string {
