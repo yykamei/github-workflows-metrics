@@ -28980,7 +28980,7 @@ __nccwpck_require__.a(module, async (__webpack_handle_async_dependencies__, __we
 __nccwpck_require__.r(__webpack_exports__);
 /* harmony import */ var _actions_core__WEBPACK_IMPORTED_MODULE_0__ = __nccwpck_require__(2186);
 /* harmony import */ var _actions_core__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__nccwpck_require__.n(_actions_core__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _main__WEBPACK_IMPORTED_MODULE_1__ = __nccwpck_require__(3496);
+/* harmony import */ var _main__WEBPACK_IMPORTED_MODULE_1__ = __nccwpck_require__(5474);
 
 
 try {
@@ -28996,7 +28996,7 @@ __webpack_async_result__();
 
 /***/ }),
 
-/***/ 3496:
+/***/ 5474:
 /***/ ((__unused_webpack_module, __webpack_exports__, __nccwpck_require__) => {
 
 "use strict";
@@ -29131,8 +29131,8 @@ class GitHubAPIClient {
             updatedAt: new DateTime(r.updated_at),
         }));
     }
-    async createIssue(owner, repo, issueBody) {
-        const { title, body, assignees, labels } = issueBody;
+    async createIssue(owner, repo, issueContent) {
+        const { title, body, assignees, labels } = issueContent;
         const response = await this.client.request("POST /repos/{owner}/{repo}/issues", {
             owner,
             repo,
@@ -29148,6 +29148,26 @@ class GitHubAPIClient {
             ...response.data,
             body: response.data.body ?? "",
         });
+    }
+}
+
+;// CONCATENATED MODULE: ./src/GitHubIssueContent.ts
+class GitHubIssueContent {
+    charts;
+    title;
+    assignees;
+    labels;
+    constructor(charts, title, assignees, labels) {
+        this.charts = charts;
+        this.title = title;
+        this.assignees = assignees;
+        this.labels = labels;
+    }
+    get body() {
+        const chunks = this.charts.map((c) => {
+            return c.visualize();
+        });
+        return chunks.join("\n");
     }
 }
 
@@ -29170,8 +29190,8 @@ class GitHubRepository {
     async getWorkflowRuns(workflow) {
         return this.apiClient.getWorkflowRuns(this.owner, this.repo, workflow.id);
     }
-    async createIssue(issueBody) {
-        return this.apiClient.createIssue(this.owner, this.repo, issueBody);
+    async createIssue(issueContent) {
+        return this.apiClient.createIssue(this.owner, this.repo, issueContent);
     }
 }
 
@@ -29235,7 +29255,9 @@ xychart-beta
 
 
 
+
 const main = async () => {
+    const now = new Date();
     const input = new Input();
     const apiClient = new GitHubAPIClient(input.token);
     const repository = new GitHubRepository(input.owner, input.repo, apiClient);
@@ -29244,9 +29266,8 @@ const main = async () => {
         const runs = await repository.getWorkflowRuns(w);
         return new MermaidXYChart(w, runs);
     }));
-    for (const c of charts) {
-        console.log(c.visualize());
-    }
+    const issueContent = new GitHubIssueContent(charts, `GitHub Workflow Metrics on ${now.toDateString()}`);
+    await repository.createIssue(issueContent);
 };
 /* harmony default export */ const src_main = (main);
 
