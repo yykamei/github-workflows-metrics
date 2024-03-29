@@ -1,12 +1,22 @@
-import { describe, expect, it } from "vitest";
+import { Context } from "@actions/github/lib/context";
+import { describe, expect, it, vi } from "vitest";
 import { DateTime } from "../src/DateTime";
 import { GitHubIssueContent } from "../src/GitHubIssueContent";
 import { GitHubWorkflow } from "../src/GitHubWorkflow";
 import { GitHubWorkflowRun } from "../src/GitHubWorkflowRun";
+import { Input } from "../src/Input";
 import { MermaidXYChart } from "../src/MermaidXYChart";
 
 describe("GitHubIssueContent", () => {
 	it("should initialize", () => {
+		const context = new Context();
+		vi.spyOn(context, "repo", "get").mockReturnValue({
+			owner: "yykamei",
+			repo: "test-repo",
+		});
+		const getInput = vi.fn(() => "");
+		const input = new Input(context, getInput);
+
 		const mermaidXYChart1 = new MermaidXYChart(
 			new GitHubWorkflow(88, "ABC", "abc.yml"),
 			[
@@ -31,6 +41,7 @@ describe("GitHubIssueContent", () => {
 						updatedAt: updatedAt!,
 					}),
 			),
+			input,
 		);
 		const mermaidXYChart2 = new MermaidXYChart(
 			new GitHubWorkflow(88, "XYZ", "xyz.yml"),
@@ -56,6 +67,7 @@ describe("GitHubIssueContent", () => {
 						updatedAt: updatedAt!,
 					}),
 			),
+			input,
 		);
 		const content = new GitHubIssueContent(
 			[mermaidXYChart1, mermaidXYChart2],

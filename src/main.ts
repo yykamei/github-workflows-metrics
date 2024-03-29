@@ -15,7 +15,7 @@ const main = async () => {
 			const runs = await repository.getWorkflowRuns(w, {
 				status: input.status,
 			});
-			return new MermaidXYChart(w, runs);
+			return new MermaidXYChart(w, runs, input);
 		}),
 	);
 	const issueContent = new GitHubIssueContent(

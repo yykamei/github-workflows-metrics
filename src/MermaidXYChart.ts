@@ -1,10 +1,12 @@
 import type { GitHubWorkflow } from "./GitHubWorkflow";
 import type { GitHubWorkflowRun } from "./GitHubWorkflowRun";
+import type { Input } from "./Input";
 
 export class MermaidXYChart {
 	constructor(
 		private readonly workflow: GitHubWorkflow,
 		private readonly runs: GitHubWorkflowRun[],
+		private readonly input: Input,
 	) {}
 
 	visualize(): string {
@@ -21,6 +23,7 @@ export class MermaidXYChart {
 		});
 		const xAxis = runs.map((r) => r.parameters.runNumber);
 		const seconds = runs.map((r) => r.duration.toSeconds());
+		const status = this.input.status ? ` for status=${this.input.status}` : "";
 		return `
 \`\`\`mermaid
 ---
@@ -32,7 +35,7 @@ config:
             titlePadding: 16
 ---
 xychart-beta
-    title "${this.workflow.name} (${this.workflow.path})"
+    title "${this.workflow.name} (${this.workflow.path}${status})"
     x-axis "GitHub Workflow Run" [${xAxis.join(",")}]
     y-axis "Duration (in seconds)"
     bar [${seconds.join(",")}]

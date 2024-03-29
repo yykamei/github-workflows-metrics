@@ -29339,9 +29339,11 @@ class Input {
 class MermaidXYChart {
     workflow;
     runs;
-    constructor(workflow, runs) {
+    input;
+    constructor(workflow, runs, input) {
         this.workflow = workflow;
         this.runs = runs;
+        this.input = input;
     }
     visualize() {
         const runs = this.runs.toSorted((a, b) => {
@@ -29357,6 +29359,7 @@ class MermaidXYChart {
         });
         const xAxis = runs.map((r) => r.parameters.runNumber);
         const seconds = runs.map((r) => r.duration.toSeconds());
+        const status = this.input.status ? ` for status=${this.input.status}` : "";
         return `
 \`\`\`mermaid
 ---
@@ -29368,7 +29371,7 @@ config:
             titlePadding: 16
 ---
 xychart-beta
-    title "${this.workflow.name} (${this.workflow.path})"
+    title "${this.workflow.name} (${this.workflow.path}${status})"
     x-axis "GitHub Workflow Run" [${xAxis.join(",")}]
     y-axis "Duration (in seconds)"
     bar [${seconds.join(",")}]
@@ -29394,7 +29397,7 @@ const main = async () => {
         const runs = await repository.getWorkflowRuns(w, {
             status: input.status,
         });
-        return new MermaidXYChart(w, runs);
+        return new MermaidXYChart(w, runs, input);
     }));
     const issueContent = new GitHubIssueContent(charts, `GitHub Workflow Metrics on ${now.toDateString()}`, [], [input.label]);
     for (const issue of await repository.getIssues([input.label])) {
