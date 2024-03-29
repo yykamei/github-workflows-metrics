@@ -25,6 +25,7 @@ export class GitHubAPIClient implements APIClient {
 			if (options.method !== "GET") {
 				return;
 			}
+			debug(`TESTTEST: ${JSON.stringify(options)}`);
 			const key = `${options.method}-${options.url}`.replaceAll("/", "-");
 			const path = `.octokit-cache/${key}`;
 			const cacheKey = await restoreCache([path], key);
@@ -57,7 +58,7 @@ export class GitHubAPIClient implements APIClient {
 		this.client.hook.after("request", async (response, options) => {
 			const etag = response.headers.etag;
 			if (options.method === "GET" && etag) {
-				const key = `${options.method}-${options.url}`.replaceAll("/", "-");
+				const key = `${options.method}-${response.url}`.replaceAll("/", "-");
 				const path = `.octokit-cache/${key}`;
 				await fs.writeFile(path, JSON.stringify({ etag, response }));
 				await saveCache([path], key);

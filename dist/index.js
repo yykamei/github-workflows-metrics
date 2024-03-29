@@ -82474,6 +82474,7 @@ class GitHubAPIClient {
             if (options.method !== "GET") {
                 return;
             }
+            (0,core.debug)(`TESTTEST: ${JSON.stringify(options)}`);
             const key = `${options.method}-${options.url}`.replaceAll("/", "-");
             const path = `.octokit-cache/${key}`;
             const cacheKey = await (0,cache.restoreCache)([path], key);
@@ -82508,7 +82509,7 @@ class GitHubAPIClient {
         this.client.hook.after("request", async (response, options) => {
             const etag = response.headers.etag;
             if (options.method === "GET" && etag) {
-                const key = `${options.method}-${options.url}`.replaceAll("/", "-");
+                const key = `${options.method}-${response.url}`.replaceAll("/", "-");
                 const path = `.octokit-cache/${key}`;
                 await promises_namespaceObject.writeFile(path, JSON.stringify({ etag, response }));
                 await (0,cache.saveCache)([path], key);
