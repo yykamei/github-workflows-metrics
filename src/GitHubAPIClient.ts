@@ -22,7 +22,7 @@ export class GitHubAPIClient implements APIClient {
 			const rateLimitRemaining = response.headers["x-ratelimit-remaining"];
 			const rateLimitReset = response.headers["x-ratelimit-reset"];
 			debug(
-				`Rate limit for ${options.url}: Limit=${rateLimit}, Remaining=${rateLimitRemaining}, Reset=${rateLimitReset}`,
+				`Rate limit: Limit=${rateLimit}, Remaining=${rateLimitRemaining}, Reset=${rateLimitReset} on ${options.url}`,
 			);
 		});
 	}

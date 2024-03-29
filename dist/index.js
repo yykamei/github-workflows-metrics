@@ -29109,7 +29109,7 @@ class GitHubAPIClient {
             const rateLimit = response.headers["x-ratelimit-limit"];
             const rateLimitRemaining = response.headers["x-ratelimit-remaining"];
             const rateLimitReset = response.headers["x-ratelimit-reset"];
-            (0,core.debug)(`Rate limit for ${options.url}: Limit=${rateLimit}, Remaining=${rateLimitRemaining}, Reset=${rateLimitReset}`);
+            (0,core.debug)(`Rate limit: Limit=${rateLimit}, Remaining=${rateLimitRemaining}, Reset=${rateLimitReset} on ${options.url}`);
         });
     }
     async getWorkflow(owner, repo, path) {
