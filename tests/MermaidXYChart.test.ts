@@ -48,8 +48,8 @@ describe("DateTime", () => {
 			].map(
 				([createdAt, updatedAt], index) =>
 					new GitHubWorkflowRun({
-						id: 123 + index,
-						runNumber: 3 + index,
+						id: 123 - index,
+						runNumber: 300 - index,
 						name: null,
 						displayTitle: "abc",
 						path: "abc.yml",
@@ -63,7 +63,6 @@ describe("DateTime", () => {
 					}),
 			),
 		);
-		console.log(mermaidXYChart.visualize());
 		expect(mermaidXYChart.visualize()).toEqual(`
 \`\`\`mermaid
 ---
@@ -76,10 +75,10 @@ config:
 ---
 xychart-beta
     title "ABC (abc.yml)"
-    x-axis "GitHub Workflow Run" [3,4,5,6,7,8,9,10,11]
+    x-axis "GitHub Workflow Run" [292,293,294,295,296,297,298,299,300]
     y-axis "Duration (in seconds)"
-    bar [815,658,684,734,911,1055,971,942,521]
-    line [815,658,684,734,911,1055,971,942,521]
+    bar [521,942,971,1055,911,734,684,658,815]
+    line [521,942,971,1055,911,734,684,658,815]
 \`\`\`
 `);
 	});

@@ -15,9 +15,9 @@ export class MermaidXYChart {
 				return 0;
 			}
 			if (aa < bb) {
-				return 1;
+				return -1;
 			}
-			return -1;
+			return 1;
 		});
 		const xAxis = runs.map((r) => r.parameters.runNumber);
 		const seconds = runs.map((r) => r.duration.toSeconds());
