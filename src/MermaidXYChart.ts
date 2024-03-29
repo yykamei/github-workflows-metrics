@@ -8,8 +8,19 @@ export class MermaidXYChart {
 	) {}
 
 	visualize(): string {
-		const xAxis = this.runs.map((r) => r.parameters.runNumber);
-		const seconds = this.runs.map((r) => r.duration.toSeconds());
+		const runs = this.runs.toSorted((a, b) => {
+			const aa = a.date.getTime();
+			const bb = b.date.getTime();
+			if (aa === bb) {
+				return 0;
+			}
+			if (aa < bb) {
+				return 1;
+			}
+			return -1;
+		});
+		const xAxis = runs.map((r) => r.parameters.runNumber);
+		const seconds = runs.map((r) => r.duration.toSeconds());
 		return `
 \`\`\`mermaid
 ---
