@@ -90,6 +90,7 @@ export class GitHubAPIClient implements APIClient {
 					per_page: 100,
 					page,
 					exclude_pull_requests: options?.excludePullRequests,
+					status: options?.status,
 				},
 			);
 			link = response.headers.link || "";

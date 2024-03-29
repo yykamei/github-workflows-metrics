@@ -29146,6 +29146,7 @@ class GitHubAPIClient {
                 per_page: 100,
                 page,
                 exclude_pull_requests: options?.excludePullRequests,
+                status: options?.status,
             });
             link = response.headers.link || "";
             page += 1;
@@ -29294,6 +29295,41 @@ class Input {
         }
         return only.split(/\s*,\s*/);
     }
+    get status() {
+        const s = this.getInputFn("status");
+        switch (s) {
+            case "queued":
+                return s;
+            case "in_progress":
+                return s;
+            case "completed":
+                return s;
+            case "action_required":
+                return s;
+            case "cancelled":
+                return s;
+            case "failure":
+                return s;
+            case "neutral":
+                return s;
+            case "skipped":
+                return s;
+            case "stale":
+                return s;
+            case "success":
+                return s;
+            case "timed_out":
+                return s;
+            case "requested":
+                return s;
+            case "waiting":
+                return s;
+            case "pending":
+                return s;
+            default:
+                return undefined;
+        }
+    }
     get token() {
         return this.getInputFn("token", { required: true });
     }
@@ -29355,7 +29391,9 @@ const main = async () => {
     const repository = new GitHubRepository(input.owner, input.repo, apiClient);
     const workflows = await repository.getWorkflows(input.only);
     const charts = await Promise.all(workflows.map(async (w) => {
-        const runs = await repository.getWorkflowRuns(w);
+        const runs = await repository.getWorkflowRuns(w, {
+            status: input.status,
+        });
         return new MermaidXYChart(w, runs);
     }));
     const issueContent = new GitHubIssueContent(charts, `GitHub Workflow Metrics on ${now.toDateString()}`, [], [input.label]);

@@ -5,6 +5,15 @@ inputs:
     description: Only the specified workflows will be measured. This is supposed to be comma-separated list
     required: false
     default: ""
+  status:
+    description: |
+      Only the workflows with the specified status will be measured.
+      This can be:
+      completed, action_required, cancelled, failure, neutral,
+      skipped, stale, success, timed_out, in_progress, queued,
+      requested, waiting, pending
+    required: false
+    default: ""
   label:
     description: The label for GitHub issues that the GitHub Action creates
     required: false

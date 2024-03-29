@@ -3,8 +3,25 @@ import type { GitHubIssueContent } from "./GitHubIssueContent";
 import type { GitHubWorkflow } from "./GitHubWorkflow";
 import type { GitHubWorkflowRun } from "./GitHubWorkflowRun";
 
+export type WorkflowStatus =
+	| "queued"
+	| "in_progress"
+	| "completed"
+	| "action_required"
+	| "cancelled"
+	| "failure"
+	| "neutral"
+	| "skipped"
+	| "stale"
+	| "success"
+	| "timed_out"
+	| "requested"
+	| "waiting"
+	| "pending";
+
 export type GetWorkflowRunsOptions = {
 	readonly excludePullRequests?: boolean;
+	readonly status?: WorkflowStatus;
 };
 
 export interface APIClient {

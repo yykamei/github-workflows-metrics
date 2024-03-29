@@ -21,6 +21,8 @@ describe("Input", () => {
 					return "github-workflows-metrics";
 				case "only":
 					return "";
+				case "status":
+					return "failure";
 				default:
 					throw new Error("Unsupported key");
 			}
@@ -30,6 +32,7 @@ describe("Input", () => {
 		expect(input.repo).toEqual("test-repo");
 		expect(input.label).toEqual("github-workflows-metrics");
 		expect(input.only).toBeNull();
+		expect(input.status).toEqual("failure");
 		expect(input.token).toEqual("my-token");
 	});
 
@@ -49,5 +52,37 @@ describe("Input", () => {
 		});
 		const input = new Input(context, getInput);
 		expect(input.only).toEqual(["a.yml", "b.yml", "c.yml"]);
+	});
+
+	it("should validate status input", () => {
+		const context = new Context();
+		vi.spyOn(context, "repo", "get").mockReturnValue({
+			owner: "yykamei",
+			repo: "test-repo",
+		});
+		const validValues = [
+			"completed",
+			"action_required",
+			"cancelled",
+			"failure",
+			"neutral",
+			"skipped",
+			"stale",
+			"success",
+			"timed_out",
+			"in_progress",
+			"queued",
+			"requested",
+			"waiting",
+			"pending",
+		];
+		for (const v of validValues) {
+			const getInput = vi.fn(() => v);
+			const input = new Input(context, getInput);
+			expect(input.status).toEqual(v);
+		}
+		const getInput = vi.fn(() => "unknown");
+		const input = new Input(context, getInput);
+		expect(input.status).toBeUndefined();
 	});
 });
