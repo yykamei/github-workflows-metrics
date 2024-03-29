@@ -2,6 +2,7 @@ import type { GitHubIssue } from "./GitHubIssue";
 import type { GitHubIssueContent } from "./GitHubIssueContent";
 import type { GitHubWorkflow } from "./GitHubWorkflow";
 import type { GitHubWorkflowRun } from "./GitHubWorkflowRun";
+import type { Usage } from "./Usage";
 
 export type WorkflowStatus =
 	| "queued"
@@ -41,7 +42,7 @@ export interface APIClient {
 		owner: string,
 		repo: string,
 		runId: number,
-	): Promise<number | null>;
+	): Promise<Usage>;
 	getIssues(
 		owner: string,
 		repo: string,

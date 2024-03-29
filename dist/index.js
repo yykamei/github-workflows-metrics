@@ -28980,7 +28980,7 @@ __nccwpck_require__.a(module, async (__webpack_handle_async_dependencies__, __we
 __nccwpck_require__.r(__webpack_exports__);
 /* harmony import */ var _actions_core__WEBPACK_IMPORTED_MODULE_0__ = __nccwpck_require__(2186);
 /* harmony import */ var _actions_core__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__nccwpck_require__.n(_actions_core__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _main__WEBPACK_IMPORTED_MODULE_1__ = __nccwpck_require__(5474);
+/* harmony import */ var _main__WEBPACK_IMPORTED_MODULE_1__ = __nccwpck_require__(4377);
 
 
 try {
@@ -28996,7 +28996,7 @@ __webpack_async_result__();
 
 /***/ }),
 
-/***/ 5474:
+/***/ 4377:
 /***/ ((__unused_webpack_module, __webpack_exports__, __nccwpck_require__) => {
 
 "use strict";
@@ -29081,7 +29081,19 @@ class GitHubWorkflowRun {
     }
 }
 
+;// CONCATENATED MODULE: ./src/Usage.ts
+class Usage {
+    runId;
+    duration;
+    constructor(runId, duration) {
+        this.runId = runId;
+        this.duration = duration;
+    }
+}
+
 ;// CONCATENATED MODULE: ./src/GitHubAPIClient.ts
+
+
 
 
 
@@ -29174,7 +29186,8 @@ class GitHubAPIClient {
                 "X-GitHub-Api-Version": "2022-11-28",
             },
         });
-        return response.data.run_duration_ms ?? null;
+        const durationMs = response.data.run_duration_ms;
+        return new Usage(runId, durationMs ? new Duration(durationMs) : null);
     }
     async getIssues(owner, repo, labels) {
         const response = await this.client.request("GET /repos/{owner}/{repo}/issues", {
@@ -29353,10 +29366,12 @@ class Input {
 class MermaidXYChart {
     workflow;
     runs;
+    usages;
     input;
-    constructor(workflow, runs, input) {
+    constructor(workflow, runs, usages, input) {
         this.workflow = workflow;
         this.runs = runs;
+        this.usages = usages;
         this.input = input;
     }
     visualize() {
@@ -29372,7 +29387,13 @@ class MermaidXYChart {
             return 1;
         });
         const xAxis = runs.map((r) => r.parameters.runNumber);
-        const seconds = runs.map((r) => r.duration.toSeconds());
+        const seconds = runs.map((r) => {
+            const usage = this.usages.find((u) => u.runId === r.parameters.id);
+            if (!usage) {
+                throw new Error(`Usage must exist here with runId=${r.parameters.id}`);
+            }
+            return usage.duration?.toSeconds() || 0;
+        });
         const status = this.input.status ? ` for status=${this.input.status}` : "";
         return `
 \`\`\`mermaid
@@ -29411,7 +29432,8 @@ const main = async () => {
         const runs = await repository.getWorkflowRuns(w, {
             status: input.status,
         });
-        return new MermaidXYChart(w, runs, input);
+        const usages = await Promise.all(runs.map((r) => repository.getWorkflowRunUsage(r)));
+        return new MermaidXYChart(w, runs, usages, input);
     }));
     const issueContent = new GitHubIssueContent(charts, `GitHub Workflow Metrics on ${now.toDateString()}`, [], [input.label]);
     for (const issue of await repository.getIssues([input.label])) {

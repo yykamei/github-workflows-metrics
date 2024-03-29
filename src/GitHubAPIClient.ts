@@ -3,10 +3,12 @@ import { getOctokit } from "@actions/github";
 import type { Octokit } from "@octokit/core";
 import type { APIClient, GetWorkflowRunsOptions } from "./APIClient";
 import { DateTime } from "./DateTime";
+import { Duration } from "./Duration";
 import { GitHubIssue } from "./GitHubIssue";
 import type { GitHubIssueContent } from "./GitHubIssueContent";
 import { GitHubWorkflow } from "./GitHubWorkflow";
 import { GitHubWorkflowRun } from "./GitHubWorkflowRun";
+import { Usage } from "./Usage";
 
 const GITHUB_LINK_REL_REXT = 'rel="next"';
 
@@ -118,7 +120,7 @@ export class GitHubAPIClient implements APIClient {
 		owner: string,
 		repo: string,
 		runId: number,
-	): Promise<number | null> {
+	): Promise<Usage> {
 		const response = await this.client.request(
 			"GET /repos/{owner}/{repo}/actions/runs/{run_id}/timing",
 			{
@@ -130,7 +132,8 @@ export class GitHubAPIClient implements APIClient {
 				},
 			},
 		);
-		return response.data.run_duration_ms ?? null;
+		const durationMs = response.data.run_duration_ms;
+		return new Usage(runId, durationMs ? new Duration(durationMs) : null);
 	}
 
 	async getIssues(

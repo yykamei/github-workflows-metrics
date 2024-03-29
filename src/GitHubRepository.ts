@@ -3,6 +3,7 @@ import type { GitHubIssue } from "./GitHubIssue";
 import type { GitHubIssueContent } from "./GitHubIssueContent";
 import type { GitHubWorkflow } from "./GitHubWorkflow";
 import type { GitHubWorkflowRun } from "./GitHubWorkflowRun";
+import type { Usage } from "./Usage";
 
 export class GitHubRepository {
 	constructor(
@@ -37,7 +38,7 @@ export class GitHubRepository {
 		);
 	}
 
-	async getWorkflowRunUsage(run: GitHubWorkflowRun): Promise<number | null> {
+	async getWorkflowRunUsage(run: GitHubWorkflowRun): Promise<Usage> {
 		return this.apiClient.getWorkflowRunUsage(
 			this.owner,
 			this.repo,

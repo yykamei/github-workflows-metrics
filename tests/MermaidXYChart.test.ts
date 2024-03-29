@@ -1,10 +1,12 @@
 import { Context } from "@actions/github/lib/context";
 import { describe, expect, it, vi } from "vitest";
 import { DateTime } from "../src/DateTime";
+import { Duration } from "../src/Duration";
 import { GitHubWorkflow } from "../src/GitHubWorkflow";
 import { GitHubWorkflowRun } from "../src/GitHubWorkflowRun";
 import { Input } from "../src/Input";
 import { MermaidXYChart } from "../src/MermaidXYChart";
+import { Usage } from "../src/Usage";
 
 describe("DateTime", () => {
 	it("should initialize", () => {
@@ -15,62 +17,70 @@ describe("DateTime", () => {
 		});
 		const getInput = vi.fn(() => "");
 		const input = new Input(context, getInput);
+		const dates = [
+			[
+				new DateTime("2024-02-27T09:03:29Z"),
+				new DateTime("2024-02-27T09:17:04Z"),
+			],
+			[
+				new DateTime("2024-02-26T09:09:30Z"),
+				new DateTime("2024-02-26T09:20:28Z"),
+			],
+			[
+				new DateTime("2024-02-25T08:59:20Z"),
+				new DateTime("2024-02-25T09:10:44Z"),
+			],
+			[
+				new DateTime("2024-02-24T08:56:28Z"),
+				new DateTime("2024-02-24T09:08:42Z"),
+			],
+			[
+				new DateTime("2024-02-23T08:58:29Z"),
+				new DateTime("2024-02-23T09:13:40Z"),
+			],
+			[
+				new DateTime("2024-02-22T09:38:12Z"),
+				new DateTime("2024-02-22T09:55:47Z"),
+			],
+			[
+				new DateTime("2024-02-21T09:04:38Z"),
+				new DateTime("2024-02-21T09:20:49Z"),
+			],
+			[
+				new DateTime("2024-02-20T09:03:38Z"),
+				new DateTime("2024-02-20T09:19:20Z"),
+			],
+			[
+				new DateTime("2024-02-19T08:59:49Z"),
+				new DateTime("2024-02-19T09:08:30Z"),
+			],
+		];
+		const runs = dates.map(
+			([createdAt, updatedAt], index) =>
+				new GitHubWorkflowRun({
+					id: 123 - index,
+					runNumber: 300 - index,
+					name: null,
+					displayTitle: "abc",
+					path: "abc.yml",
+					event: "push",
+					conclusion: "success",
+					workflowId: 88,
+					// biome-ignore lint/style/noNonNullAssertion: the test data are supposed to be set.
+					createdAt: createdAt!,
+					// biome-ignore lint/style/noNonNullAssertion: the test data are supposed to be set.
+					updatedAt: updatedAt!,
+				}),
+		);
+		const usages = dates.map(([createdAt, updatedAt], index) => {
+			// biome-ignore lint/style/noNonNullAssertion: the test data are supposed to be set.
+			const duration = updatedAt!.minus(createdAt!);
+			return new Usage(123 - index, duration);
+		});
 		const mermaidXYChart = new MermaidXYChart(
 			new GitHubWorkflow(88, "ABC", "abc.yml"),
-			[
-				[
-					new DateTime("2024-02-27T09:03:29Z"),
-					new DateTime("2024-02-27T09:17:04Z"),
-				],
-				[
-					new DateTime("2024-02-26T09:09:30Z"),
-					new DateTime("2024-02-26T09:20:28Z"),
-				],
-				[
-					new DateTime("2024-02-25T08:59:20Z"),
-					new DateTime("2024-02-25T09:10:44Z"),
-				],
-				[
-					new DateTime("2024-02-24T08:56:28Z"),
-					new DateTime("2024-02-24T09:08:42Z"),
-				],
-				[
-					new DateTime("2024-02-23T08:58:29Z"),
-					new DateTime("2024-02-23T09:13:40Z"),
-				],
-				[
-					new DateTime("2024-02-22T09:38:12Z"),
-					new DateTime("2024-02-22T09:55:47Z"),
-				],
-				[
-					new DateTime("2024-02-21T09:04:38Z"),
-					new DateTime("2024-02-21T09:20:49Z"),
-				],
-				[
-					new DateTime("2024-02-20T09:03:38Z"),
-					new DateTime("2024-02-20T09:19:20Z"),
-				],
-				[
-					new DateTime("2024-02-19T08:59:49Z"),
-					new DateTime("2024-02-19T09:08:30Z"),
-				],
-			].map(
-				([createdAt, updatedAt], index) =>
-					new GitHubWorkflowRun({
-						id: 123 - index,
-						runNumber: 300 - index,
-						name: null,
-						displayTitle: "abc",
-						path: "abc.yml",
-						event: "push",
-						conclusion: "success",
-						workflowId: 88,
-						// biome-ignore lint/style/noNonNullAssertion: the test data are supposed to be set.
-						createdAt: createdAt!,
-						// biome-ignore lint/style/noNonNullAssertion: the test data are supposed to be set.
-						updatedAt: updatedAt!,
-					}),
-			),
+			runs,
+			usages,
 			input,
 		);
 		expect(mermaidXYChart.visualize()).toEqual(`
@@ -104,27 +114,20 @@ xychart-beta
 		const mermaidXYChart = new MermaidXYChart(
 			new GitHubWorkflow(88, "ABC", "abc.yml"),
 			[
-				[
-					new DateTime("2024-02-19T08:59:49Z"),
-					new DateTime("2024-02-19T09:08:30Z"),
-				],
-			].map(
-				([createdAt, updatedAt], index) =>
-					new GitHubWorkflowRun({
-						id: 123 - index,
-						runNumber: 200 - index,
-						name: null,
-						displayTitle: "abc",
-						path: "abc.yml",
-						event: "push",
-						conclusion: "success",
-						workflowId: 88,
-						// biome-ignore lint/style/noNonNullAssertion: the test data are supposed to be set.
-						createdAt: createdAt!,
-						// biome-ignore lint/style/noNonNullAssertion: the test data are supposed to be set.
-						updatedAt: updatedAt!,
-					}),
-			),
+				new GitHubWorkflowRun({
+					id: 123,
+					runNumber: 200,
+					name: null,
+					displayTitle: "abc",
+					path: "abc.yml",
+					event: "push",
+					conclusion: "success",
+					workflowId: 88,
+					createdAt: new DateTime("2024-02-19T08:59:49Z"),
+					updatedAt: new DateTime("2024-02-19T09:08:30Z"),
+				}),
+			],
+			[new Usage(123, new Duration(521000))],
 			input,
 		);
 		expect(mermaidXYChart.visualize()).toEqual(`

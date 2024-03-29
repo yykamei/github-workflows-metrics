@@ -4,6 +4,7 @@ import { GitHubIssue } from "./GitHubIssue";
 import type { GitHubIssueContent } from "./GitHubIssueContent";
 import { GitHubWorkflow } from "./GitHubWorkflow";
 import { GitHubWorkflowRun } from "./GitHubWorkflowRun";
+import { Usage } from "./Usage";
 
 export class TestClient implements APIClient {
 	async getWorkflows(_owner: string, _repo: string): Promise<GitHubWorkflow[]> {
@@ -45,9 +46,9 @@ export class TestClient implements APIClient {
 	async getWorkflowRunUsage(
 		_owner: string,
 		_repo: string,
-		_runId: number,
-	): Promise<number | null> {
-		return null;
+		runId: number,
+	): Promise<Usage> {
+		return new Usage(runId, null);
 	}
 
 	async getIssues(
