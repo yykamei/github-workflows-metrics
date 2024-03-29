@@ -1,7 +1,7 @@
 import { debug } from "@actions/core";
 import { getOctokit } from "@actions/github";
 import type { Octokit } from "@octokit/core";
-import type { APIClient } from "./APIClient";
+import type { APIClient, GetWorkflowRunsOptions } from "./APIClient";
 import { DateTime } from "./DateTime";
 import { GitHubIssue } from "./GitHubIssue";
 import type { GitHubIssueContent } from "./GitHubIssueContent";
@@ -71,6 +71,7 @@ export class GitHubAPIClient implements APIClient {
 		owner: string,
 		repo: string,
 		workflowId: number,
+		options?: GetWorkflowRunsOptions,
 	): Promise<GitHubWorkflowRun[]> {
 		let page = 1;
 		let link = "";
@@ -88,6 +89,7 @@ export class GitHubAPIClient implements APIClient {
 					},
 					per_page: 100,
 					page,
+					exclude_pull_requests: options?.excludePullRequests,
 				},
 			);
 			link = response.headers.link || "";

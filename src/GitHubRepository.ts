@@ -1,4 +1,4 @@
-import type { APIClient } from "./APIClient";
+import type { APIClient, GetWorkflowRunsOptions } from "./APIClient";
 import type { GitHubIssue } from "./GitHubIssue";
 import type { GitHubIssueContent } from "./GitHubIssueContent";
 import type { GitHubWorkflow } from "./GitHubWorkflow";
@@ -27,8 +27,14 @@ export class GitHubRepository {
 
 	async getWorkflowRuns(
 		workflow: GitHubWorkflow,
+		options?: GetWorkflowRunsOptions,
 	): Promise<GitHubWorkflowRun[]> {
-		return this.apiClient.getWorkflowRuns(this.owner, this.repo, workflow.id);
+		return this.apiClient.getWorkflowRuns(
+			this.owner,
+			this.repo,
+			workflow.id,
+			options,
+		);
 	}
 
 	async getIssues(labels: string[]): Promise<GitHubIssue[]> {

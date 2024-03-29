@@ -3,6 +3,10 @@ import type { GitHubIssueContent } from "./GitHubIssueContent";
 import type { GitHubWorkflow } from "./GitHubWorkflow";
 import type { GitHubWorkflowRun } from "./GitHubWorkflowRun";
 
+export type GetWorkflowRunsOptions = {
+	readonly excludePullRequests?: boolean;
+};
+
 export interface APIClient {
 	getWorkflows(owner: string, repo: string): Promise<GitHubWorkflow[]>;
 	getWorkflow(
@@ -14,6 +18,7 @@ export interface APIClient {
 		owner: string,
 		repo: string,
 		workflowId: number,
+		options?: GetWorkflowRunsOptions,
 	): Promise<GitHubWorkflowRun[]>;
 	getIssues(
 		owner: string,

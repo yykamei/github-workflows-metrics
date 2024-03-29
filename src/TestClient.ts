@@ -1,4 +1,4 @@
-import type { APIClient } from "./APIClient";
+import type { APIClient, GetWorkflowRunsOptions } from "./APIClient";
 import { DateTime } from "./DateTime";
 import { GitHubIssue } from "./GitHubIssue";
 import type { GitHubIssueContent } from "./GitHubIssueContent";
@@ -24,6 +24,7 @@ export class TestClient implements APIClient {
 		_owner: string,
 		_repo: string,
 		workflowId: number,
+		_options?: GetWorkflowRunsOptions,
 	): Promise<GitHubWorkflowRun[]> {
 		return [
 			new GitHubWorkflowRun({

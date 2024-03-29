@@ -31,6 +31,10 @@ export class Input {
 		return only.split(/\s*,\s*/);
 	}
 
+	get excludePullRequests(): boolean {
+		return this.getInputFn("exclude-pull-requests").toLowerCase() === "true";
+	}
+
 	get token(): string {
 		return this.getInputFn("token", { required: true });
 	}

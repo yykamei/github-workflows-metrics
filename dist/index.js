@@ -29130,7 +29130,7 @@ class GitHubAPIClient {
         }
         return workflows;
     }
-    async getWorkflowRuns(owner, repo, workflowId) {
+    async getWorkflowRuns(owner, repo, workflowId, options) {
         let page = 1;
         let link = "";
         let runs = [];
@@ -29145,6 +29145,7 @@ class GitHubAPIClient {
                 },
                 per_page: 100,
                 page,
+                exclude_pull_requests: options?.excludePullRequests,
             });
             link = response.headers.link || "";
             page += 1;
@@ -29253,8 +29254,8 @@ class GitHubRepository {
     async getWorkflow(path) {
         return this.apiClient.getWorkflow(this.owner, this.repo, path);
     }
-    async getWorkflowRuns(workflow) {
-        return this.apiClient.getWorkflowRuns(this.owner, this.repo, workflow.id);
+    async getWorkflowRuns(workflow, options) {
+        return this.apiClient.getWorkflowRuns(this.owner, this.repo, workflow.id, options);
     }
     async getIssues(labels) {
         return this.apiClient.getIssues(this.owner, this.repo, labels);
@@ -29292,6 +29293,9 @@ class Input {
             return null;
         }
         return only.split(/\s*,\s*/);
+    }
+    get excludePullRequests() {
+        return this.getInputFn("exclude-pull-requests").toLowerCase() === "true";
     }
     get token() {
         return this.getInputFn("token", { required: true });
@@ -29354,7 +29358,9 @@ const main = async () => {
     const repository = new GitHubRepository(input.owner, input.repo, apiClient);
     const workflows = await repository.getWorkflows(input.only);
     const charts = await Promise.all(workflows.map(async (w) => {
-        const runs = await repository.getWorkflowRuns(w);
+        const runs = await repository.getWorkflowRuns(w, {
+            excludePullRequests: input.excludePullRequests,
+        });
         return new MermaidXYChart(w, runs);
     }));
     const issueContent = new GitHubIssueContent(charts, `GitHub Workflow Metrics on ${now.toDateString()}`, [], [input.label]);

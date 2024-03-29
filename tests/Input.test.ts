@@ -21,6 +21,8 @@ describe("Input", () => {
 					return "github-workflows-metrics";
 				case "only":
 					return "";
+				case "exclude-pull-requests":
+					return "false";
 				default:
 					throw new Error("Unsupported key");
 			}
@@ -30,8 +32,10 @@ describe("Input", () => {
 		expect(input.repo).toEqual("test-repo");
 		expect(input.label).toEqual("github-workflows-metrics");
 		expect(input.only).toBeNull();
+		expect(input.excludePullRequests).toBe(false);
 		expect(input.token).toEqual("my-token");
 	});
+
 	it("should return an Array for only when specified", () => {
 		const context = new Context();
 		vi.spyOn(context, "repo", "get").mockReturnValue({
