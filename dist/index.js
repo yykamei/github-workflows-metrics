@@ -82469,12 +82469,48 @@ class GitHubAPIClient {
     client;
     constructor(token) {
         this.client = (0,github.getOctokit)(token);
-        this.client.hook.after("request", async (response, options) => {
-            const etag = response.headers.etag;
-            if (etag) {
+        // TODO: This requires refactoring
+        this.client.hook.before("request", async (options) => {
+            if (options.method !== "GET") {
+                return;
+            }
+            const key = `${options.method}-${options.url}`.replaceAll("/", "-");
+            const path = `.octokit-cache/${key}`;
+            const cacheKey = await (0,cache.restoreCache)([path], key);
+            if (cacheKey) {
+                try {
+                    const raw = await promises_namespaceObject.readFile(cacheKey, "utf-8");
+                    const { etag } = JSON.parse(raw);
+                    options.headers = {
+                        ...options.headers,
+                        "If-None-Match": etag,
+                    };
+                }
+                catch { }
+            }
+        });
+        this.client.hook.error("request", async (error, options) => {
+            if ("status" in error && error.status === 304) {
                 const key = `${options.method}-${options.url}`.replaceAll("/", "-");
                 const path = `.octokit-cache/${key}`;
-                await promises_namespaceObject.writeFile(path, JSON.stringify({ etag, data: response.data }));
+                const cacheKey = await (0,cache.restoreCache)([path], key);
+                if (cacheKey) {
+                    try {
+                        const raw = await promises_namespaceObject.readFile(cacheKey, "utf-8");
+                        const { response } = JSON.parse(raw);
+                        error.response = response;
+                    }
+                    catch { }
+                }
+            }
+            throw error;
+        });
+        this.client.hook.after("request", async (response, options) => {
+            const etag = response.headers.etag;
+            if (options.method === "GET" && etag) {
+                const key = `${options.method}-${options.url}`.replaceAll("/", "-");
+                const path = `.octokit-cache/${key}`;
+                await promises_namespaceObject.writeFile(path, JSON.stringify({ etag, response }));
                 await (0,cache.saveCache)([path], key);
             }
             const rateLimit = response.headers["x-ratelimit-limit"];

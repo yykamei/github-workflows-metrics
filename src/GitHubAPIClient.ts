@@ -1,5 +1,5 @@
 import * as fs from "node:fs/promises";
-import { saveCache } from "@actions/cache";
+import { restoreCache, saveCache } from "@actions/cache";
 import { debug } from "@actions/core";
 import { getOctokit } from "@actions/github";
 import type { Octokit } from "@octokit/core";
@@ -19,12 +19,47 @@ export class GitHubAPIClient implements APIClient {
 
 	constructor(token: string) {
 		this.client = getOctokit(token);
-		this.client.hook.after("request", async (response, options) => {
-			const etag = response.headers.etag;
-			if (etag) {
+
+		// TODO: This requires refactoring
+		this.client.hook.before("request", async (options) => {
+			if (options.method !== "GET") {
+				return;
+			}
+			const key = `${options.method}-${options.url}`.replaceAll("/", "-");
+			const path = `.octokit-cache/${key}`;
+			const cacheKey = await restoreCache([path], key);
+			if (cacheKey) {
+				try {
+					const raw = await fs.readFile(cacheKey, "utf-8");
+					const { etag } = JSON.parse(raw);
+					options.headers = {
+						...options.headers,
+						"If-None-Match": etag,
+					};
+				} catch {}
+			}
+		});
+		this.client.hook.error("request", async (error, options) => {
+			if ("status" in error && error.status === 304) {
 				const key = `${options.method}-${options.url}`.replaceAll("/", "-");
 				const path = `.octokit-cache/${key}`;
-				await fs.writeFile(path, JSON.stringify({ etag, data: response.data }));
+				const cacheKey = await restoreCache([path], key);
+				if (cacheKey) {
+					try {
+						const raw = await fs.readFile(cacheKey, "utf-8");
+						const { response } = JSON.parse(raw);
+						error.response = response;
+					} catch {}
+				}
+			}
+			throw error;
+		});
+		this.client.hook.after("request", async (response, options) => {
+			const etag = response.headers.etag;
+			if (options.method === "GET" && etag) {
+				const key = `${options.method}-${options.url}`.replaceAll("/", "-");
+				const path = `.octokit-cache/${key}`;
+				await fs.writeFile(path, JSON.stringify({ etag, response }));
 				await saveCache([path], key);
 			}
 
