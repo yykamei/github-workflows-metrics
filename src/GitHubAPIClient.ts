@@ -114,6 +114,25 @@ export class GitHubAPIClient implements APIClient {
 		return runs;
 	}
 
+	async getWorkflowRunUsage(
+		owner: string,
+		repo: string,
+		runId: number,
+	): Promise<number | null> {
+		const response = await this.client.request(
+			"GET /repos/{owner}/{repo}/actions/runs/{run_id}/timing",
+			{
+				owner,
+				repo,
+				run_id: runId,
+				headers: {
+					"X-GitHub-Api-Version": "2022-11-28",
+				},
+			},
+		);
+		return response.data.run_duration_ms ?? null;
+	}
+
 	async getIssues(
 		owner: string,
 		repo: string,

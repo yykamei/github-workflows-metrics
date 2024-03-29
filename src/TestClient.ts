@@ -41,6 +41,15 @@ export class TestClient implements APIClient {
 			}),
 		];
 	}
+
+	async getWorkflowRunUsage(
+		_owner: string,
+		_repo: string,
+		_runId: number,
+	): Promise<number | null> {
+		return null;
+	}
+
 	async getIssues(
 		_owner: string,
 		_repo: string,

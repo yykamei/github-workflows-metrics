@@ -29165,6 +29165,17 @@ class GitHubAPIClient {
         }
         return runs;
     }
+    async getWorkflowRunUsage(owner, repo, runId) {
+        const response = await this.client.request("GET /repos/{owner}/{repo}/actions/runs/{run_id}/timing", {
+            owner,
+            repo,
+            run_id: runId,
+            headers: {
+                "X-GitHub-Api-Version": "2022-11-28",
+            },
+        });
+        return response.data.run_duration_ms ?? null;
+    }
     async getIssues(owner, repo, labels) {
         const response = await this.client.request("GET /repos/{owner}/{repo}/issues", {
             owner,
@@ -29257,6 +29268,9 @@ class GitHubRepository {
     }
     async getWorkflowRuns(workflow, options) {
         return this.apiClient.getWorkflowRuns(this.owner, this.repo, workflow.id, options);
+    }
+    async getWorkflowRunUsage(run) {
+        return this.apiClient.getWorkflowRunUsage(this.owner, this.repo, run.parameters.id);
     }
     async getIssues(labels) {
         return this.apiClient.getIssues(this.owner, this.repo, labels);

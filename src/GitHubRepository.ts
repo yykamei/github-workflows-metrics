@@ -37,6 +37,14 @@ export class GitHubRepository {
 		);
 	}
 
+	async getWorkflowRunUsage(run: GitHubWorkflowRun): Promise<number | null> {
+		return this.apiClient.getWorkflowRunUsage(
+			this.owner,
+			this.repo,
+			run.parameters.id,
+		);
+	}
+
 	async getIssues(labels: string[]): Promise<GitHubIssue[]> {
 		return this.apiClient.getIssues(this.owner, this.repo, labels);
 	}

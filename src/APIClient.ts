@@ -37,6 +37,11 @@ export interface APIClient {
 		workflowId: number,
 		options?: GetWorkflowRunsOptions,
 	): Promise<GitHubWorkflowRun[]>;
+	getWorkflowRunUsage(
+		owner: string,
+		repo: string,
+		runId: number,
+	): Promise<number | null>;
 	getIssues(
 		owner: string,
 		repo: string,
