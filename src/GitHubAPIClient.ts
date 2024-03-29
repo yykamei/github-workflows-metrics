@@ -17,6 +17,14 @@ export class GitHubAPIClient implements APIClient {
 
 	constructor(token: string) {
 		this.client = getOctokit(token);
+		this.client.hook.after("request", async (response, options) => {
+			const rateLimit = response.headers["x-ratelimit-limit"];
+			const rateLimitRemaining = response.headers["x-ratelimit-remaining"];
+			const rateLimitReset = response.headers["x-ratelimit-reset"];
+			debug(
+				`Rate limit for ${options.url}: Limit=${rateLimit}, Remaining=${rateLimitRemaining}, Reset=${rateLimitReset}`,
+			);
+		});
 	}
 
 	async getWorkflow(

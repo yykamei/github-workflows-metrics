@@ -29105,6 +29105,12 @@ class GitHubAPIClient {
     client;
     constructor(token) {
         this.client = (0,github.getOctokit)(token);
+        this.client.hook.after("request", async (response, options) => {
+            const rateLimit = response.headers["x-ratelimit-limit"];
+            const rateLimitRemaining = response.headers["x-ratelimit-remaining"];
+            const rateLimitReset = response.headers["x-ratelimit-reset"];
+            (0,core.debug)(`Rate limit for ${options.url}: Limit=${rateLimit}, Remaining=${rateLimitRemaining}, Reset=${rateLimitReset}`);
+        });
     }
     async getWorkflow(owner, repo, path) {
         const response = await this.client.request("GET /repos/{owner}/{repo}/actions/workflows/{workflow_id}", {
