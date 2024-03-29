@@ -1,3 +1,5 @@
+import * as fs from "node:fs/promises";
+import { saveCache } from "@actions/cache";
 import { debug } from "@actions/core";
 import { getOctokit } from "@actions/github";
 import type { Octokit } from "@octokit/core";
@@ -18,6 +20,14 @@ export class GitHubAPIClient implements APIClient {
 	constructor(token: string) {
 		this.client = getOctokit(token);
 		this.client.hook.after("request", async (response, options) => {
+			const etag = response.headers.etag;
+			if (etag) {
+				const key = `${options.method}-${options.url}`;
+				const path = `.octokit-cache/${options.method} ${options.url}`;
+				await fs.writeFile(path, JSON.stringify({ etag, data: response.data }));
+				await saveCache([path], key);
+			}
+
 			const rateLimit = response.headers["x-ratelimit-limit"];
 			const rateLimitRemaining = response.headers["x-ratelimit-remaining"];
 			const rateLimitReset = response.headers["x-ratelimit-reset"];
