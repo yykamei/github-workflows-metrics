@@ -29294,9 +29294,6 @@ class Input {
         }
         return only.split(/\s*,\s*/);
     }
-    get excludePullRequests() {
-        return this.getInputFn("exclude-pull-requests").toLowerCase() === "true";
-    }
     get token() {
         return this.getInputFn("token", { required: true });
     }
@@ -29358,9 +29355,7 @@ const main = async () => {
     const repository = new GitHubRepository(input.owner, input.repo, apiClient);
     const workflows = await repository.getWorkflows(input.only);
     const charts = await Promise.all(workflows.map(async (w) => {
-        const runs = await repository.getWorkflowRuns(w, {
-            excludePullRequests: input.excludePullRequests,
-        });
+        const runs = await repository.getWorkflowRuns(w);
         return new MermaidXYChart(w, runs);
     }));
     const issueContent = new GitHubIssueContent(charts, `GitHub Workflow Metrics on ${now.toDateString()}`, [], [input.label]);

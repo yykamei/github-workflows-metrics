@@ -12,9 +12,7 @@ const main = async () => {
 	const workflows = await repository.getWorkflows(input.only);
 	const charts = await Promise.all(
 		workflows.map(async (w) => {
-			const runs = await repository.getWorkflowRuns(w, {
-				excludePullRequests: input.excludePullRequests,
-			});
+			const runs = await repository.getWorkflowRuns(w);
 			return new MermaidXYChart(w, runs);
 		}),
 	);
