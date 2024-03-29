@@ -22,8 +22,8 @@ export class GitHubAPIClient implements APIClient {
 		this.client.hook.after("request", async (response, options) => {
 			const etag = response.headers.etag;
 			if (etag) {
-				const key = `${options.method}-${options.url}`;
-				const path = `.octokit-cache/${options.method} ${options.url}`;
+				const key = `${options.method}-${options.url}`.replaceAll("/", "-");
+				const path = `.octokit-cache/${key}`;
 				await fs.writeFile(path, JSON.stringify({ etag, data: response.data }));
 				await saveCache([path], key);
 			}

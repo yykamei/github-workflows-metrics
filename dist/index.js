@@ -82472,8 +82472,8 @@ class GitHubAPIClient {
         this.client.hook.after("request", async (response, options) => {
             const etag = response.headers.etag;
             if (etag) {
-                const key = `${options.method}-${options.url}`;
-                const path = `.octokit-cache/${options.method} ${options.url}`;
+                const key = `${options.method}-${options.url}`.replaceAll("/", "-");
+                const path = `.octokit-cache/${key}`;
                 await promises_namespaceObject.writeFile(path, JSON.stringify({ etag, data: response.data }));
                 await (0,cache.saveCache)([path], key);
             }
