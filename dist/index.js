@@ -29452,12 +29452,14 @@ class Input {
 ;// CONCATENATED MODULE: ./src/MemoryCacheStore.ts
 class MemoryCacheStore {
     data = {};
+    async setup() { }
     async read(cacheKey) {
         return this.data[cacheKey] || null;
     }
-    async write(cacheKey, data) {
-        this.data[cacheKey] = data;
+    async write(cacheKey, cache) {
+        this.data[cacheKey] = cache;
     }
+    async settle() { }
 }
 
 ;// CONCATENATED MODULE: ./src/MermaidXYChart.ts

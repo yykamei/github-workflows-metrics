@@ -128,6 +128,5 @@ out
 .yarn/install-state.gz
 .pnp.*
 
-# octokit-cache
-/.octokit-cache/*
-!/.octokit-cache/.keep
+# octokit-cache is used for manually caching github-workflows-metrics
+/.octokit-cache
