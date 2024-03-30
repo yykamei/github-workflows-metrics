@@ -8,7 +8,7 @@ describe("GitHubActionsCacheStore", () => {
 	let workdir: string;
 
 	beforeEach(async () => {
-		workdir = await mkdtemp(tmpdir());
+		workdir = await mkdtemp(join(tmpdir(), "gwm-"));
 	});
 
 	afterEach(async () => {
