@@ -29155,14 +29155,19 @@ class GitHubAPIClient {
             // @ts-ignore
             options.cacheKey = undefined;
             if (cacheKey) {
+                (0,core.debug)(`Cache for key ${cacheKey} is being extracted...`);
                 cache = await this.cacheStore.read(cacheKey);
                 if (cache) {
+                    (0,core.debug)(`Cache for key ${cacheKey} has been found: etag=${cache.etag}`);
                     options.headers["If-None-Match"] = cache.etag;
+                }
+                else {
+                    (0,core.debug)(`Cache for key ${cacheKey} is missing`);
                 }
             }
             try {
                 const response = await request(options);
-                response.data;
+                (0,core.debug)("GitHub returned the actual response and consumed Rate limit usage");
                 if (cacheKey) {
                     await this.cacheStore.write(cacheKey, response);
                 }
@@ -29173,6 +29178,7 @@ class GitHubAPIClient {
                     e instanceof RequestError &&
                     e.status === 304 &&
                     e.response) {
+                    (0,core.debug)("GitHub returned 304 and indicated we can use cache data");
                     return { ...e.response, data: cache.data };
                 }
                 throw e;

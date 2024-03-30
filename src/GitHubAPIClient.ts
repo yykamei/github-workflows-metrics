@@ -30,14 +30,21 @@ export class GitHubAPIClient implements APIClient {
 			// @ts-ignore
 			options.cacheKey = undefined;
 			if (cacheKey) {
+				debug(`Cache for key ${cacheKey} is being extracted...`);
 				cache = await this.cacheStore.read(cacheKey);
 				if (cache) {
+					debug(`Cache for key ${cacheKey} has been found: etag=${cache.etag}`);
 					options.headers["If-None-Match"] = cache.etag;
+				} else {
+					debug(`Cache for key ${cacheKey} is missing`);
 				}
 			}
 			try {
 				const response = await request(options);
-				response.data;
+				debug(
+					"GitHub returned the actual response and consumed Rate limit usage",
+				);
+
 				if (cacheKey) {
 					await this.cacheStore.write(cacheKey, response);
 				}
@@ -49,6 +56,7 @@ export class GitHubAPIClient implements APIClient {
 					e.status === 304 &&
 					e.response
 				) {
+					debug("GitHub returned 304 and indicated we can use cache data");
 					return { ...e.response, data: cache.data };
 				}
 				throw e;
