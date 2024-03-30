@@ -5,5 +5,5 @@ export type OctokitCachedData = {
 
 export interface CacheStore {
 	read(cacheKey: string): Promise<OctokitCachedData | null>;
-	write(cacheKey: string, response: OctokitCachedData): Promise<void>;
+	write(cacheKey: string, data: OctokitCachedData): Promise<void>;
 }

@@ -42,7 +42,10 @@ export class GitHubAPIClient implements APIClient {
 			try {
 				const response = await request(options);
 				if (cacheKey) {
-					await this.cacheStore.write(cacheKey, response);
+					await this.cacheStore.write(cacheKey, {
+						etag: response.headers.etag,
+						data: response.data,
+					});
 				}
 				return response;
 			} catch (e) {
