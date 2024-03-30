@@ -32,9 +32,9 @@ export class GitHubActionsCacheStore implements CacheStore {
 	) {}
 
 	async read(cacheKey: string): Promise<OctokitCachedData | null> {
-		await this.restore([this.baseDir], cacheKey);
-
 		const dir = join(this.baseDir, cacheKey);
+		await this.restore([dir], cacheKey);
+
 		try {
 			const etag = await readFile(join(dir, "etag"), "utf-8");
 			const data = await readFile(join(dir, "data"), "utf-8");
@@ -51,6 +51,6 @@ export class GitHubActionsCacheStore implements CacheStore {
 			await writeFile(join(dir, "etag"), cache.etag);
 		}
 		await writeFile(join(dir, "data"), JSON.stringify(cache.data));
-		await this.save([this.baseDir], cacheKey);
+		await this.save([dir], cacheKey);
 	}
 }

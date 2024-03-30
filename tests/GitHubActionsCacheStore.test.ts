@@ -22,7 +22,7 @@ describe("GitHubActionsCacheStore", () => {
 			const store = new GitHubActionsCacheStore(workdir, restore);
 			const cache = await store.read("key");
 			expect(cache).toBeNull();
-			expect(restore).toHaveBeenCalledWith([workdir], "key");
+			expect(restore).toHaveBeenCalledWith([join(workdir, "key")], "key");
 		});
 
 		it("should return cache if cache exists", async () => {
@@ -36,7 +36,7 @@ describe("GitHubActionsCacheStore", () => {
 			const store = new GitHubActionsCacheStore(workdir, restore);
 			const cache = await store.read("key");
 			expect(cache).toEqual({ etag: "etag1", data: { field: 1 } });
-			expect(restore).toHaveBeenCalledWith([workdir], "key");
+			expect(restore).toHaveBeenCalledWith([join(workdir, "key")], "key");
 		});
 	});
 
@@ -50,7 +50,7 @@ describe("GitHubActionsCacheStore", () => {
 			const data = await readFile(join(workdir, "key", "data"), "utf-8");
 			expect(etag).toEqual("e");
 			expect(JSON.parse(data)).toEqual({ my: "field" });
-			expect(save).toHaveBeenCalledWith([workdir], "key");
+			expect(save).toHaveBeenCalledWith([join(workdir, "key")], "key");
 		});
 	});
 });

@@ -82703,8 +82703,8 @@ class GitHubActionsCacheStore {
         this.save = save;
     }
     async read(cacheKey) {
-        await this.restore([this.baseDir], cacheKey);
         const dir = (0,external_node_path_namespaceObject.join)(this.baseDir, cacheKey);
+        await this.restore([dir], cacheKey);
         try {
             const etag = await (0,promises_namespaceObject.readFile)((0,external_node_path_namespaceObject.join)(dir, "etag"), "utf-8");
             const data = await (0,promises_namespaceObject.readFile)((0,external_node_path_namespaceObject.join)(dir, "data"), "utf-8");
@@ -82721,7 +82721,7 @@ class GitHubActionsCacheStore {
             await (0,promises_namespaceObject.writeFile)((0,external_node_path_namespaceObject.join)(dir, "etag"), cache.etag);
         }
         await (0,promises_namespaceObject.writeFile)((0,external_node_path_namespaceObject.join)(dir, "data"), JSON.stringify(cache.data));
-        await this.save([this.baseDir], cacheKey);
+        await this.save([dir], cacheKey);
     }
 }
 
