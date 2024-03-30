@@ -16,56 +16,41 @@ describe("GitHubActionsCacheStore", () => {
 		await rm(workdir, { recursive: true, force: true });
 	});
 
-	describe("setup()", () => {
-		it("should setup", async () => {
-			const restore = vi.fn();
-			const store = new GitHubActionsCacheStore(workdir, restore);
-			await store.setup();
-			expect(restore).toHaveBeenCalledWith(
-				[workdir],
-				"github-workflow-metrics",
-			);
-		});
-	});
-
 	describe("read()", () => {
 		it("should return nil if cache is missing", async () => {
-			const store = new GitHubActionsCacheStore(workdir);
+			const restore = vi.fn();
+			const store = new GitHubActionsCacheStore(workdir, restore);
 			const cache = await store.read("key");
 			expect(cache).toBeNull();
+			expect(restore).toHaveBeenCalledWith([workdir], "key");
 		});
 
 		it("should return cache if cache exists", async () => {
+			const restore = vi.fn();
 			await mkdir(join(workdir, "key"), { recursive: true });
 			await writeFile(join(workdir, "key", "etag"), "etag1");
 			await writeFile(
 				join(workdir, "key", "data"),
 				JSON.stringify({ field: 1 }),
 			);
-			const store = new GitHubActionsCacheStore(workdir);
+			const store = new GitHubActionsCacheStore(workdir, restore);
 			const cache = await store.read("key");
 			expect(cache).toEqual({ etag: "etag1", data: { field: 1 } });
+			expect(restore).toHaveBeenCalledWith([workdir], "key");
 		});
 	});
 
 	describe("write()", () => {
 		it("should write cache", async () => {
-			const store = new GitHubActionsCacheStore(workdir);
+			const restore = vi.fn();
+			const save = vi.fn();
+			const store = new GitHubActionsCacheStore(workdir, restore, save);
 			await store.write("key", { etag: "e", data: { my: "field" } });
 			const etag = await readFile(join(workdir, "key", "etag"), "utf-8");
 			const data = await readFile(join(workdir, "key", "data"), "utf-8");
 			expect(etag).toEqual("e");
 			expect(JSON.parse(data)).toEqual({ my: "field" });
-		});
-	});
-
-	describe("settle()", () => {
-		it("should settle", async () => {
-			const restore = vi.fn();
-			const save = vi.fn();
-			const store = new GitHubActionsCacheStore(workdir, restore, save);
-			await store.settle();
-			expect(save).toHaveBeenCalledWith([workdir], "github-workflow-metrics");
+			expect(save).toHaveBeenCalledWith([workdir], "key");
 		});
 	});
 });

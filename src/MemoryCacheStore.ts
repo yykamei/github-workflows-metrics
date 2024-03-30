@@ -3,8 +3,6 @@ import type { CacheStore, OctokitCachedData } from "./CacheStore";
 export class MemoryCacheStore implements CacheStore {
 	private readonly data: { [key: string]: OctokitCachedData } = {};
 
-	async setup(): Promise<void> {}
-
 	async read(cacheKey: string): Promise<OctokitCachedData | null> {
 		return this.data[cacheKey] || null;
 	}
@@ -12,6 +10,4 @@ export class MemoryCacheStore implements CacheStore {
 	async write(cacheKey: string, cache: OctokitCachedData): Promise<void> {
 		this.data[cacheKey] = cache;
 	}
-
-	async settle(): Promise<void> {}
 }

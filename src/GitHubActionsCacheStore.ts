@@ -8,7 +8,6 @@ import type {
 import type { CacheStore, OctokitCachedData } from "./CacheStore";
 
 const CACHE_BASE_DIR = ".octokit-cache";
-const CACHE_KEY = "github-workflow-metrics";
 
 type RestoreCacheType = (
 	paths: string[],
@@ -32,11 +31,9 @@ export class GitHubActionsCacheStore implements CacheStore {
 		private readonly save: SaveCacheType = saveCache,
 	) {}
 
-	async setup(): Promise<void> {
-		await this.restore([this.baseDir], CACHE_KEY);
-	}
-
 	async read(cacheKey: string): Promise<OctokitCachedData | null> {
+		await this.restore([this.baseDir], cacheKey);
+
 		const dir = join(this.baseDir, cacheKey);
 		try {
 			const etag = await readFile(join(dir, "etag"), "utf-8");
@@ -54,9 +51,6 @@ export class GitHubActionsCacheStore implements CacheStore {
 			await writeFile(join(dir, "etag"), cache.etag);
 		}
 		await writeFile(join(dir, "data"), JSON.stringify(cache.data));
-	}
-
-	async settle(): Promise<void> {
-		await this.save([this.baseDir], CACHE_KEY);
+		await this.save([this.baseDir], cacheKey);
 	}
 }

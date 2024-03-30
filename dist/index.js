@@ -82693,7 +82693,6 @@ var cache = __nccwpck_require__(7799);
 
 
 const CACHE_BASE_DIR = ".octokit-cache";
-const CACHE_KEY = "github-workflow-metrics";
 class GitHubActionsCacheStore {
     baseDir;
     restore;
@@ -82703,10 +82702,8 @@ class GitHubActionsCacheStore {
         this.restore = restore;
         this.save = save;
     }
-    async setup() {
-        await this.restore([this.baseDir], CACHE_KEY);
-    }
     async read(cacheKey) {
+        await this.restore([this.baseDir], cacheKey);
         const dir = (0,external_node_path_namespaceObject.join)(this.baseDir, cacheKey);
         try {
             const etag = await (0,promises_namespaceObject.readFile)((0,external_node_path_namespaceObject.join)(dir, "etag"), "utf-8");
@@ -82724,9 +82721,7 @@ class GitHubActionsCacheStore {
             await (0,promises_namespaceObject.writeFile)((0,external_node_path_namespaceObject.join)(dir, "etag"), cache.etag);
         }
         await (0,promises_namespaceObject.writeFile)((0,external_node_path_namespaceObject.join)(dir, "data"), JSON.stringify(cache.data));
-    }
-    async settle() {
-        await this.save([this.baseDir], CACHE_KEY);
+        await this.save([this.baseDir], cacheKey);
     }
 }
 
@@ -82920,27 +82915,21 @@ const main = async () => {
     const now = new Date();
     const input = new Input();
     const cacheStore = new GitHubActionsCacheStore();
-    await cacheStore.setup();
-    try {
-        const apiClient = new GitHubAPIClient(input.token, cacheStore);
-        const repository = new GitHubRepository(input.owner, input.repo, apiClient);
-        const workflows = await repository.getWorkflows(input.only);
-        const charts = await Promise.all(workflows.map(async (w) => {
-            const runs = await repository.getWorkflowRuns(w, {
-                status: input.status,
-            });
-            const usages = await Promise.all(runs.map((r) => repository.getWorkflowRunUsage(r)));
-            return new MermaidXYChart(w, runs, usages, input);
-        }));
-        const issueContent = new GitHubIssueContent(charts, `GitHub Workflow Metrics on ${now.toDateString()}`, [], [input.label]);
-        for (const issue of await repository.getIssues([input.label])) {
-            await repository.closeIssue(issue);
-        }
-        await repository.createIssue(issueContent);
+    const apiClient = new GitHubAPIClient(input.token, cacheStore);
+    const repository = new GitHubRepository(input.owner, input.repo, apiClient);
+    const workflows = await repository.getWorkflows(input.only);
+    const charts = await Promise.all(workflows.map(async (w) => {
+        const runs = await repository.getWorkflowRuns(w, {
+            status: input.status,
+        });
+        const usages = await Promise.all(runs.map((r) => repository.getWorkflowRunUsage(r)));
+        return new MermaidXYChart(w, runs, usages, input);
+    }));
+    const issueContent = new GitHubIssueContent(charts, `GitHub Workflow Metrics on ${now.toDateString()}`, [], [input.label]);
+    for (const issue of await repository.getIssues([input.label])) {
+        await repository.closeIssue(issue);
     }
-    finally {
-        await cacheStore.settle();
-    }
+    await repository.createIssue(issueContent);
 };
 /* harmony default export */ const src_main = (main);
 
