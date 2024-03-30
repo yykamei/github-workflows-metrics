@@ -29167,7 +29167,6 @@ class GitHubAPIClient {
             }
             try {
                 const response = await request(options);
-                (0,core.debug)("GitHub returned the actual response and consumed Rate limit usage");
                 if (cacheKey) {
                     await this.cacheStore.write(cacheKey, response);
                 }
@@ -29178,17 +29177,16 @@ class GitHubAPIClient {
                     e instanceof RequestError &&
                     e.status === 304 &&
                     e.response) {
-                    (0,core.debug)("GitHub returned 304 and indicated we can use cache data");
                     return { ...e.response, data: cache.data };
                 }
                 throw e;
             }
         });
-        this.client.hook.after("request", async (response, options) => {
+        this.client.hook.after("request", async (response) => {
             const rateLimit = response.headers["x-ratelimit-limit"];
             const rateLimitRemaining = response.headers["x-ratelimit-remaining"];
             const rateLimitReset = response.headers["x-ratelimit-reset"];
-            (0,core.debug)(`Rate limit: Limit=${rateLimit}, Remaining=${rateLimitRemaining}, Reset=${rateLimitReset} on ${options.url}`);
+            (0,core.debug)(`Rate limit: Limit=${rateLimit}, Remaining=${rateLimitRemaining}, Reset=${rateLimitReset} on ${response.url}`);
         });
     }
     async getWorkflow(owner, repo, path) {
