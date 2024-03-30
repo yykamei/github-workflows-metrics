@@ -144,7 +144,7 @@ describe("GitHubAPIClient.getWorkflowRuns()", () => {
 	it("should call GitHub API five times", async () => {
 		const client = new GitHubAPIClient("token", new MemoryCacheStore());
 		const spy = vi.spyOn(client.client, "request");
-		for (const id of [4, 5, 6, 7, 8, 9, 10]) {
+		for (const id of [4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]) {
 			spy.mockResolvedValueOnce({
 				data: {
 					workflow_runs: [
@@ -169,9 +169,11 @@ describe("GitHubAPIClient.getWorkflowRuns()", () => {
 		}
 
 		const runs = await client.getWorkflowRuns("yykamei", "test-repo", 34);
-		expect(spy).toHaveBeenCalledTimes(5);
-		expect(runs.length).toEqual(5);
-		expect(runs.map((r) => r.parameters.id)).toEqual([4, 5, 6, 7, 8]);
+		expect(spy).toHaveBeenCalledTimes(10);
+		expect(runs.length).toEqual(10);
+		expect(runs.map((r) => r.parameters.id)).toEqual([
+			4, 5, 6, 7, 8, 9, 10, 11, 12, 13,
+		]);
 	});
 });
 

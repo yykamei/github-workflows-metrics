@@ -130,7 +130,7 @@ export class GitHubAPIClient implements APIClient {
 		let page = 1;
 		let link = "";
 		let runs: GitHubWorkflowRun[] = [];
-		while (page === 1 || (page <= 5 && link.includes(GITHUB_LINK_REL_REXT))) {
+		while (page === 1 || (page <= 10 && link.includes(GITHUB_LINK_REL_REXT))) {
 			debug(`Fetching runs page ${page}`);
 			const response = await this.client.request(
 				"GET /repos/{owner}/{repo}/actions/workflows/{workflow_id}/runs",
