@@ -1,9 +1,7 @@
 import { debug } from "@actions/core";
 import { getOctokit } from "@actions/github";
 import type { Octokit } from "@octokit/core";
-import { RequestError } from "@octokit/request-error";
 import type { APIClient, GetWorkflowRunsOptions } from "./APIClient";
-import type { CacheStore, OctokitCachedData } from "./CacheStore";
 import { DateTime } from "./DateTime";
 import { Duration } from "./Duration";
 import { GitHubIssue } from "./GitHubIssue";
@@ -17,49 +15,8 @@ const GITHUB_LINK_REL_REXT = 'rel="next"';
 export class GitHubAPIClient implements APIClient {
 	public readonly client: Octokit;
 
-	constructor(
-		token: string,
-		private readonly cacheStore: CacheStore,
-	) {
+	constructor(token: string) {
 		this.client = getOctokit(token);
-
-		this.client.hook.wrap("request", async (request, options) => {
-			let cache: OctokitCachedData | null = null;
-			// @ts-ignore
-			const cacheKey: string | null | undefined = options.cacheKey;
-			// @ts-ignore
-			options.cacheKey = undefined;
-			if (cacheKey) {
-				debug(`Cache for key ${cacheKey} is being extracted...`);
-				cache = await this.cacheStore.read(cacheKey);
-				if (cache) {
-					debug(`Cache for key ${cacheKey} has been found: etag=${cache.etag}`);
-					options.headers["If-None-Match"] = cache.etag;
-				} else {
-					debug(`Cache for key ${cacheKey} is missing`);
-				}
-			}
-			try {
-				const response = await request(options);
-				if (cacheKey) {
-					await this.cacheStore.write(cacheKey, {
-						etag: response.headers.etag,
-						data: response.data,
-					});
-				}
-				return response;
-			} catch (e) {
-				if (
-					cache &&
-					e instanceof RequestError &&
-					e.status === 304 &&
-					e.response
-				) {
-					return { ...e.response, data: cache.data };
-				}
-				throw e;
-			}
-		});
 
 		this.client.hook.after("request", async (response) => {
 			const rateLimit = response.headers["x-ratelimit-limit"];
@@ -182,7 +139,6 @@ export class GitHubAPIClient implements APIClient {
 				headers: {
 					"X-GitHub-Api-Version": "2022-11-28",
 				},
-				cacheKey: `/repos/${owner}/${repo}/actions/runs/${runId}/timing`,
 			},
 		);
 		const durationMs = response.data.run_duration_ms;

@@ -1,5 +1,4 @@
 import { GitHubAPIClient } from "./GitHubAPIClient";
-import { GitHubActionsCacheStore } from "./GitHubActionsCacheStore";
 import { GitHubIssueContent } from "./GitHubIssueContent";
 import { GitHubRepository } from "./GitHubRepository";
 import { Input } from "./Input";
@@ -8,8 +7,7 @@ import { MermaidXYChart } from "./MermaidXYChart";
 const main = async () => {
 	const now = new Date();
 	const input = new Input();
-	const cacheStore = new GitHubActionsCacheStore();
-	const apiClient = new GitHubAPIClient(input.token, cacheStore);
+	const apiClient = new GitHubAPIClient(input.token);
 	const repository = new GitHubRepository(input.owner, input.repo, apiClient);
 	const workflows = await repository.getWorkflows(input.only);
 	const charts = await Promise.all(

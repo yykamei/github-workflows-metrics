@@ -3,7 +3,6 @@ import { GitHubAPIClient } from "../src/GitHubAPIClient";
 import { GitHubIssue } from "../src/GitHubIssue";
 import { GitHubIssueContent } from "../src/GitHubIssueContent";
 import { GitHubWorkflow } from "../src/GitHubWorkflow";
-import { MemoryCacheStore } from "../src/MemoryCacheStore";
 
 describe("GitHubAPIClient.getWorkflow()", () => {
 	afterEach(() => {
@@ -11,7 +10,7 @@ describe("GitHubAPIClient.getWorkflow()", () => {
 	});
 
 	it("should get workflow from GitHub", async () => {
-		const client = new GitHubAPIClient("token", new MemoryCacheStore());
+		const client = new GitHubAPIClient("token");
 		const spy = vi.spyOn(client.client, "request");
 		spy.mockResolvedValueOnce({
 			data: { id: 8123, name: "CI" },
@@ -39,7 +38,7 @@ describe("GitHubAPIClient.getWorkflows()", () => {
 	});
 
 	it("should get workflows from GitHub", async () => {
-		const client = new GitHubAPIClient("token", new MemoryCacheStore());
+		const client = new GitHubAPIClient("token");
 		const spy = vi.spyOn(client.client, "request");
 		spy.mockResolvedValueOnce({
 			data: {
@@ -64,7 +63,7 @@ describe("GitHubAPIClient.getWorkflows()", () => {
 	});
 
 	it("should call GitHub API twice", async () => {
-		const client = new GitHubAPIClient("token", new MemoryCacheStore());
+		const client = new GitHubAPIClient("token");
 		const spy = vi.spyOn(client.client, "request");
 		spy.mockResolvedValueOnce({
 			data: {
@@ -99,7 +98,7 @@ describe("GitHubAPIClient.getWorkflowRuns()", () => {
 	});
 
 	it("should get workflow runs from GitHub", async () => {
-		const client = new GitHubAPIClient("token", new MemoryCacheStore());
+		const client = new GitHubAPIClient("token");
 		const spy = vi.spyOn(client.client, "request");
 		spy.mockResolvedValueOnce({
 			data: {
@@ -142,7 +141,7 @@ describe("GitHubAPIClient.getWorkflowRuns()", () => {
 	});
 
 	it("should call GitHub API five times", async () => {
-		const client = new GitHubAPIClient("token", new MemoryCacheStore());
+		const client = new GitHubAPIClient("token");
 		const spy = vi.spyOn(client.client, "request");
 		for (const id of [4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]) {
 			spy.mockResolvedValueOnce({
@@ -183,7 +182,7 @@ describe("GitHubAPIClient.getIssues()", () => {
 	});
 
 	it("should get issues from GitHub", async () => {
-		const client = new GitHubAPIClient("token", new MemoryCacheStore());
+		const client = new GitHubAPIClient("token");
 		const spy = vi.spyOn(client.client, "request");
 		spy.mockResolvedValueOnce({
 			data: [
@@ -213,7 +212,7 @@ describe("GitHubAPIClient.createIssue()", () => {
 	});
 
 	it("should get workflow runs from GitHub", async () => {
-		const client = new GitHubAPIClient("token", new MemoryCacheStore());
+		const client = new GitHubAPIClient("token");
 		const spy = vi.spyOn(client.client, "request");
 		spy.mockResolvedValueOnce({
 			data: {
@@ -244,7 +243,7 @@ describe("GitHubAPIClient.closeIssue()", () => {
 	});
 
 	it("should close an issue on GitHub", async () => {
-		const client = new GitHubAPIClient("token", new MemoryCacheStore());
+		const client = new GitHubAPIClient("token");
 		const spy = vi.spyOn(client.client, "request");
 		spy.mockResolvedValueOnce({
 			data: {
