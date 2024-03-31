@@ -29074,7 +29074,7 @@ class GitHubWorkflowRun {
         this.parameters = parameters;
     }
     get duration() {
-        return this.parameters.updatedAt.minus(this.parameters.createdAt);
+        return this.parameters.updatedAt.minus(this.parameters.runStartedAt || this.parameters.createdAt);
     }
     get date() {
         return new Date(this.parameters.createdAt.value);
@@ -29178,6 +29178,9 @@ class GitHubAPIClient {
                     displayTitle: r.display_title,
                     createdAt: new DateTime(r.created_at),
                     updatedAt: new DateTime(r.updated_at),
+                    runStartedAt: r.run_started_at
+                        ? new DateTime(r.run_started_at)
+                        : undefined,
                 })),
             ];
         }
@@ -29391,10 +29394,7 @@ class MermaidXYChart {
             return 1;
         });
         const xAxis = runs.map((r) => r.parameters.runNumber);
-        const seconds = runs.map((r) => {
-            const duration = r.parameters.updatedAt.minus(r.parameters.createdAt);
-            return duration.toSeconds();
-        });
+        const seconds = runs.map((r) => r.duration.toSeconds());
         const status = this.input.status ? ` for status=${this.input.status}` : "";
         return `
 \`\`\`mermaid

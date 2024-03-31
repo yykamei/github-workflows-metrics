@@ -118,6 +118,9 @@ export class GitHubAPIClient implements APIClient {
 							displayTitle: r.display_title,
 							createdAt: new DateTime(r.created_at),
 							updatedAt: new DateTime(r.updated_at),
+							runStartedAt: r.run_started_at
+								? new DateTime(r.run_started_at)
+								: undefined,
 						}),
 				),
 			];

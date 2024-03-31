@@ -39,6 +39,7 @@ export class TestClient implements APIClient {
 				workflowId,
 				createdAt: new DateTime("2024-02-26T08:59:49Z"),
 				updatedAt: new DateTime("2024-02-26T08:59:49Z"),
+				runStartedAt: new DateTime("2024-02-26T08:59:49Z"),
 			}),
 		];
 	}

@@ -117,6 +117,7 @@ xychart-beta
 					workflowId: 88,
 					createdAt: new DateTime("2024-02-19T08:59:49Z"),
 					updatedAt: new DateTime("2024-02-19T09:08:30Z"),
+					runStartedAt: new DateTime("2024-02-19T08:59:49Z"),
 				}),
 			],
 			input,

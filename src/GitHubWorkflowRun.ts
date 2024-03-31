@@ -12,13 +12,16 @@ type GitHubWorkflowRunParameters = {
 	readonly workflowId: number;
 	readonly createdAt: DateTime;
 	readonly updatedAt: DateTime;
+	readonly runStartedAt?: DateTime;
 };
 
 export class GitHubWorkflowRun {
 	constructor(public readonly parameters: GitHubWorkflowRunParameters) {}
 
 	get duration(): Duration {
-		return this.parameters.updatedAt.minus(this.parameters.createdAt);
+		return this.parameters.updatedAt.minus(
+			this.parameters.runStartedAt || this.parameters.createdAt,
+		);
 	}
 
 	get date(): Date {

@@ -22,10 +22,7 @@ export class MermaidXYChart {
 			return 1;
 		});
 		const xAxis = runs.map((r) => r.parameters.runNumber);
-		const seconds = runs.map((r) => {
-			const duration = r.parameters.updatedAt.minus(r.parameters.createdAt);
-			return duration.toSeconds();
-		});
+		const seconds = runs.map((r) => r.duration.toSeconds());
 		const status = this.input.status ? ` for status=${this.input.status}` : "";
 		return `
 \`\`\`mermaid
