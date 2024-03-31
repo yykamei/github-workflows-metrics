@@ -15,10 +15,7 @@ const main = async () => {
 			const runs = await repository.getWorkflowRuns(w, {
 				status: input.status,
 			});
-			const usages = await Promise.all(
-				runs.map((r) => repository.getWorkflowRunUsage(r)),
-			);
-			return new MermaidXYChart(w, runs, usages, input);
+			return new MermaidXYChart(w, runs, input);
 		}),
 	);
 	const issueContent = new GitHubIssueContent(

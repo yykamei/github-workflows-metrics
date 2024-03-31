@@ -1,12 +1,10 @@
 import { Context } from "@actions/github/lib/context";
 import { describe, expect, it, vi } from "vitest";
 import { DateTime } from "../src/DateTime";
-import { Duration } from "../src/Duration";
 import { GitHubWorkflow } from "../src/GitHubWorkflow";
 import { GitHubWorkflowRun } from "../src/GitHubWorkflowRun";
 import { Input } from "../src/Input";
 import { MermaidXYChart } from "../src/MermaidXYChart";
-import { Usage } from "../src/Usage";
 
 describe("DateTime", () => {
 	it("should initialize", () => {
@@ -72,15 +70,9 @@ describe("DateTime", () => {
 					updatedAt: updatedAt!,
 				}),
 		);
-		const usages = dates.map(([createdAt, updatedAt], index) => {
-			// biome-ignore lint/style/noNonNullAssertion: the test data are supposed to be set.
-			const duration = updatedAt!.minus(createdAt!);
-			return new Usage(123 - index, duration);
-		});
 		const mermaidXYChart = new MermaidXYChart(
 			new GitHubWorkflow(88, "ABC", "abc.yml"),
 			runs,
-			usages,
 			input,
 		);
 		expect(mermaidXYChart.visualize()).toEqual(`
@@ -127,7 +119,6 @@ xychart-beta
 					updatedAt: new DateTime("2024-02-19T09:08:30Z"),
 				}),
 			],
-			[new Usage(123, new Duration(521000))],
 			input,
 		);
 		expect(mermaidXYChart.visualize()).toEqual(`

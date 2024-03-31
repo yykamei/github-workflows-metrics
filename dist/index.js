@@ -29372,12 +29372,10 @@ class Input {
 class MermaidXYChart {
     workflow;
     runs;
-    usages;
     input;
-    constructor(workflow, runs, usages, input) {
+    constructor(workflow, runs, input) {
         this.workflow = workflow;
         this.runs = runs;
-        this.usages = usages;
         this.input = input;
     }
     visualize() {
@@ -29394,11 +29392,8 @@ class MermaidXYChart {
         });
         const xAxis = runs.map((r) => r.parameters.runNumber);
         const seconds = runs.map((r) => {
-            const usage = this.usages.find((u) => u.runId === r.parameters.id);
-            if (!usage) {
-                throw new Error(`Usage must exist here with runId=${r.parameters.id}`);
-            }
-            return usage.duration?.toSeconds() || 0;
+            const duration = r.parameters.updatedAt.minus(r.parameters.createdAt);
+            return duration.toSeconds();
         });
         const status = this.input.status ? ` for status=${this.input.status}` : "";
         return `
@@ -29438,8 +29433,7 @@ const main = async () => {
         const runs = await repository.getWorkflowRuns(w, {
             status: input.status,
         });
-        const usages = await Promise.all(runs.map((r) => repository.getWorkflowRunUsage(r)));
-        return new MermaidXYChart(w, runs, usages, input);
+        return new MermaidXYChart(w, runs, input);
     }));
     const issueContent = new GitHubIssueContent(charts, `GitHub Workflow Metrics on ${now.toDateString()}`, [], [input.label]);
     for (const issue of await repository.getIssues([input.label])) {
