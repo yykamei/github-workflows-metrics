@@ -67,6 +67,7 @@ config:
     xyChart:
         xAxis:
             labelPadding: 16
+            labelFontSize: 8
         yAxis:
             titlePadding: 16
 ---
@@ -84,6 +85,7 @@ config:
     xyChart:
         xAxis:
             labelPadding: 16
+            labelFontSize: 8
         yAxis:
             titlePadding: 16
 ---
