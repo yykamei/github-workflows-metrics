@@ -29382,17 +29382,25 @@ class MermaidXYChart {
         this.input = input;
     }
     visualize() {
-        const map = Map.groupBy(this.runs, (r) => {
-            return r.date.toLocaleDateString("en-CA", {
+        const map = this.runs.reduce((m, r) => {
+            const date = r.date.toLocaleDateString("en-CA", {
                 year: "numeric",
                 month: "2-digit",
                 day: "2-digit",
             });
-        });
+            const d = m.get(date);
+            if (d) {
+                d.push(r.duration.toSeconds());
+            }
+            else {
+                m.set(date, [r.duration.toSeconds()]);
+            }
+            return m;
+        }, new Map());
         const means = new Map();
-        for (const [date, runs] of map.entries()) {
-            const totalSeconds = runs.reduce((sum, r) => sum + r.duration.toSeconds(), 0);
-            means.set(date, totalSeconds / runs.length);
+        for (const [date, seconds] of map.entries()) {
+            const total = seconds.reduce((sum, s) => sum + s, 0);
+            means.set(date, total / seconds.length);
         }
         const xAxis = [];
         const seconds = [];
