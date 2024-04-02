@@ -87,7 +87,7 @@ config:
 ---
 xychart-beta
     title "ABC (abc.yml)"
-    x-axis "GitHub Workflow Run" [292,293,294,295,296,297,298,299,300]
+    x-axis "GitHub Workflow Run" [2024-02-19,2024-02-20,2024-02-21,2024-02-22,2024-02-23,2024-02-24,2024-02-25,2024-02-26,2024-02-27]
     y-axis "Duration (in seconds)"
     bar [521,942,971,1055,911,734,684,658,815]
     line [521,942,971,1055,911,734,684,658,815]
@@ -134,7 +134,7 @@ config:
 ---
 xychart-beta
     title "ABC (abc.yml for status=success)"
-    x-axis "GitHub Workflow Run" [200]
+    x-axis "GitHub Workflow Run" [2024-02-19]
     y-axis "Duration (in seconds)"
     bar [521]
     line [521]

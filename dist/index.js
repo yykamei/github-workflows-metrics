@@ -29382,19 +29382,24 @@ class MermaidXYChart {
         this.input = input;
     }
     visualize() {
-        const runs = this.runs.toSorted((a, b) => {
-            const aa = a.date.getTime();
-            const bb = b.date.getTime();
-            if (aa === bb) {
-                return 0;
-            }
-            if (aa < bb) {
-                return -1;
-            }
-            return 1;
+        const map = Map.groupBy(this.runs, (r) => {
+            return r.date.toLocaleDateString("en-CA", {
+                year: "numeric",
+                month: "2-digit",
+                day: "2-digit",
+            });
         });
-        const xAxis = runs.map((r) => r.parameters.runNumber);
-        const seconds = runs.map((r) => r.duration.toSeconds());
+        const means = new Map();
+        for (const [date, runs] of map.entries()) {
+            const totalSeconds = runs.reduce((sum, r) => sum + r.duration.toSeconds(), 0);
+            means.set(date, totalSeconds / runs.length);
+        }
+        const xAxis = [];
+        const seconds = [];
+        for (const [date, mean] of means.entries()) {
+            xAxis.unshift(date);
+            seconds.unshift(mean);
+        }
         const status = this.input.status ? ` for status=${this.input.status}` : "";
         return `
 \`\`\`mermaid
