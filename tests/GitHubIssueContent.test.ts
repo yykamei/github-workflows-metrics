@@ -48,9 +48,9 @@ describe("GitHubIssueContent", () => {
 					event: "push",
 					conclusion: "success",
 					workflowId: 923,
-					createdAt: new DateTime("2024-03-27T19:08:29Z"),
-					updatedAt: new DateTime("2024-03-27T19:08:31Z"),
-					runStartedAt: new DateTime("2024-03-27T19:08:29Z"),
+					createdAt: new DateTime("2024-03-27T12:08:29Z"),
+					updatedAt: new DateTime("2024-03-27T12:08:31Z"),
+					runStartedAt: new DateTime("2024-03-27T12:08:29Z"),
 				}),
 			],
 			input,
@@ -91,7 +91,7 @@ config:
 ---
 xychart-beta
     title "XYZ (xyz.yml)"
-    x-axis [2024-03-28]
+    x-axis [2024-03-27]
     y-axis "Duration (in seconds)"
     bar [2]
 \`\`\`
