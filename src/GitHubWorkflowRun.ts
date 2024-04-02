@@ -24,6 +24,16 @@ export class GitHubWorkflowRun {
 		);
 	}
 
+	/**
+	 * Checks if the workflow run is outlier or not.
+	 * Currently, it marks itself as outlier when duration of the workflow run is more than 6 hours.
+	 *
+	 * @returns {boolean} Returns true if the duration is more than 6 hours, otherwise false.
+	 */
+	get isOutlier(): boolean {
+		return this.duration.toSeconds() > 60 * 60 * 6;
+	}
+
 	get date(): Date {
 		return new Date(this.parameters.createdAt.value);
 	}

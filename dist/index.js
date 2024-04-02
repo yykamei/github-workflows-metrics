@@ -29076,6 +29076,15 @@ class GitHubWorkflowRun {
     get duration() {
         return this.parameters.updatedAt.minus(this.parameters.runStartedAt || this.parameters.createdAt);
     }
+    /**
+     * Checks if the workflow run is outlier or not.
+     * Currently, it marks itself as outlier when duration of the workflow run is more than 6 hours.
+     *
+     * @returns {boolean} Returns true if the duration is more than 6 hours, otherwise false.
+     */
+    get isOutlier() {
+        return this.duration.toSeconds() > 60 * 60 * 6;
+    }
     get date() {
         return new Date(this.parameters.createdAt.value);
     }
@@ -29383,6 +29392,9 @@ class MermaidXYChart {
     }
     visualize() {
         const map = this.runs.reduce((m, r) => {
+            if (r.isOutlier) {
+                return m;
+            }
             const date = r.date.toLocaleDateString("en-CA", {
                 year: "numeric",
                 month: "2-digit",

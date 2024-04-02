@@ -56,6 +56,10 @@ describe("DateTime", () => {
 				new DateTime("2024-02-19T14:01:42Z"),
 				new DateTime("2024-02-19T14:07:08Z"),
 			],
+			[
+				new DateTime("2024-02-18T14:01:42Z"),
+				new DateTime("2024-02-18T20:07:08Z"),
+			],
 		];
 		const runs = dates.map(
 			([createdAt, updatedAt], index) =>

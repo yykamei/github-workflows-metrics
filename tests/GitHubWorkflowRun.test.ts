@@ -69,4 +69,38 @@ describe("GitHubWorkflowRun", () => {
 		});
 		expect(run.date).toEqual(new Date(1693738710000));
 	});
+
+	it("should return true if the duration is more than 6 hours", () => {
+		const run = new GitHubWorkflowRun({
+			id: 123,
+			runNumber: 3,
+			name: null,
+			displayTitle: "abc",
+			path: "abc.yml",
+			event: "push",
+			conclusion: "failure",
+			workflowId: 88,
+			createdAt: new DateTime("2023-10-03T10:58:48Z"),
+			updatedAt: new DateTime("2023-10-03T16:58:49Z"),
+			runStartedAt: new DateTime("2023-10-03T10:58:48Z"),
+		});
+		expect(run.isOutlier).toBe(true);
+	});
+
+	it("should return false if the duration is less than 6 hours", () => {
+		const run = new GitHubWorkflowRun({
+			id: 123,
+			runNumber: 3,
+			name: null,
+			displayTitle: "abc",
+			path: "abc.yml",
+			event: "push",
+			conclusion: "failure",
+			workflowId: 88,
+			createdAt: new DateTime("2023-10-03T10:58:48Z"),
+			updatedAt: new DateTime("2023-10-03T16:58:48Z"),
+			runStartedAt: new DateTime("2023-10-03T10:58:48Z"),
+		});
+		expect(run.isOutlier).toBe(false);
+	});
 });

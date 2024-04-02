@@ -11,6 +11,9 @@ export class MermaidXYChart {
 
 	visualize(): string {
 		const map: Map<string, number[]> = this.runs.reduce((m, r) => {
+			if (r.isOutlier) {
+				return m;
+			}
 			const date = r.date.toLocaleDateString("en-CA", {
 				year: "numeric",
 				month: "2-digit",
