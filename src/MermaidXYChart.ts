@@ -47,7 +47,7 @@ config:
         yAxis:
             titlePadding: 16
 ---
-xychart-beta horizontal
+xychart-beta
     title "${this.workflow.name} (${this.workflow.path}${status})"
     x-axis [${xAxis.join(",")}]
     y-axis "Duration (in seconds)"
