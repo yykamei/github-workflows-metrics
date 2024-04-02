@@ -71,7 +71,7 @@ config:
         yAxis:
             titlePadding: 16
 ---
-xychart-beta
+xychart-beta horizontal
     title "ABC (abc.yml)"
     x-axis [2024-02-27]
     y-axis "Duration (in seconds)"
@@ -89,7 +89,7 @@ config:
         yAxis:
             titlePadding: 16
 ---
-xychart-beta
+xychart-beta horizontal
     title "XYZ (xyz.yml)"
     x-axis [2024-03-28]
     y-axis "Duration (in seconds)"
