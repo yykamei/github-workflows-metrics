@@ -48,7 +48,7 @@ config:
 ---
 xychart-beta
     title "${this.workflow.name} (${this.workflow.path}${status})"
-    x-axis "GitHub Workflow Run" [${xAxis.join(",")}]
+    x-axis [${xAxis.join(",")}]
     y-axis "Duration (in seconds)"
     bar [${seconds.join(",")}]
 \`\`\`

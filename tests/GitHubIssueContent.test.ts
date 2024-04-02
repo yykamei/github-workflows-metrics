@@ -72,7 +72,7 @@ config:
 ---
 xychart-beta
     title "ABC (abc.yml)"
-    x-axis "GitHub Workflow Run" [2024-02-27]
+    x-axis [2024-02-27]
     y-axis "Duration (in seconds)"
     bar [4]
 \`\`\`
@@ -89,7 +89,7 @@ config:
 ---
 xychart-beta
     title "XYZ (xyz.yml)"
-    x-axis "GitHub Workflow Run" [2024-03-28]
+    x-axis [2024-03-28]
     y-axis "Duration (in seconds)"
     bar [2]
 \`\`\`
