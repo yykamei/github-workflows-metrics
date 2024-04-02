@@ -2,15 +2,13 @@ name: GitHub Workflows Metrics
 on:
   workflow_dispatch:
 permissions:
-  contents: read # actions/checkout requires this permission
   actions: read
   issues: write
 jobs:
   ci:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: ./
+      - uses: yykamei/github-workflows-metrics@main
         with:
           only: ci.yml
           status: success
