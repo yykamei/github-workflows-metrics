@@ -27,7 +27,7 @@ export class MermaidXYChart {
 		const means: Map<string, number> = new Map();
 		for (const [date, seconds] of map.entries()) {
 			const total = seconds.reduce((sum, s) => sum + s, 0);
-			means.set(date, total / seconds.length);
+			means.set(date, Math.round(total / seconds.length));
 		}
 		const xAxis: string[] = [];
 		const seconds: number[] = [];

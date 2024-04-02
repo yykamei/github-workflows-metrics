@@ -52,6 +52,10 @@ describe("DateTime", () => {
 				new DateTime("2024-02-19T08:59:49Z"),
 				new DateTime("2024-02-19T09:08:30Z"),
 			],
+			[
+				new DateTime("2024-02-19T14:01:42Z"),
+				new DateTime("2024-02-19T14:07:08Z"),
+			],
 		];
 		const runs = dates.map(
 			([createdAt, updatedAt], index) =>
@@ -89,8 +93,8 @@ xychart-beta
     title "ABC (abc.yml)"
     x-axis "GitHub Workflow Run" [2024-02-19,2024-02-20,2024-02-21,2024-02-22,2024-02-23,2024-02-24,2024-02-25,2024-02-26,2024-02-27]
     y-axis "Duration (in seconds)"
-    bar [521,942,971,1055,911,734,684,658,815]
-    line [521,942,971,1055,911,734,684,658,815]
+    bar [424,942,971,1055,911,734,684,658,815]
+    line [424,942,971,1055,911,734,684,658,815]
 \`\`\`
 `);
 	});
