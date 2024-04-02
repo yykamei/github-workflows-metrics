@@ -75,7 +75,6 @@ xychart-beta
     x-axis "GitHub Workflow Run" [2024-02-27]
     y-axis "Duration (in seconds)"
     bar [4]
-    line [4]
 \`\`\`
 
 
@@ -93,7 +92,6 @@ xychart-beta
     x-axis "GitHub Workflow Run" [2024-03-28]
     y-axis "Duration (in seconds)"
     bar [2]
-    line [2]
 \`\`\`
 `);
 	});

@@ -51,7 +51,6 @@ xychart-beta
     x-axis "GitHub Workflow Run" [${xAxis.join(",")}]
     y-axis "Duration (in seconds)"
     bar [${seconds.join(",")}]
-    line [${seconds.join(",")}]
 \`\`\`
 `;
 	}
