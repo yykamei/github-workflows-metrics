@@ -69,7 +69,7 @@ config:
 xychart-beta
     title "${this.workflow.name} (${this.workflow.path}${status})"
     x-axis [${xAxis.join(",")}]
-    y-axis "Duration (in seconds)"
+    y-axis "Duration (${this.input.aggregate} in seconds)"
     bar [${seconds.join(",")}]
 \`\`\`
 `;
