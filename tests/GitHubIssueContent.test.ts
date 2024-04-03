@@ -77,9 +77,6 @@ xychart-beta
     x-axis ["Feb 27"]
     y-axis "Duration (in seconds)"
     bar [4]
-    line [4]
-    line [4]
-    line [4]
 \`\`\`
 
 
@@ -99,9 +96,6 @@ xychart-beta
     x-axis ["Mar 27"]
     y-axis "Duration (in seconds)"
     bar [2]
-    line [2]
-    line [2]
-    line [2]
 \`\`\`
 `);
 	});

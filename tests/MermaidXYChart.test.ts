@@ -100,9 +100,6 @@ xychart-beta
     x-axis ["Feb 19","Feb 20","Feb 21","Feb 22","Feb 23","Feb 24","Feb 25","Feb 26","Feb 27"]
     y-axis "Duration (in seconds)"
     bar [424,942,971,1055,911,734,684,658,815]
-    line [815,815,815,815,815,815,815,815,815]
-    line [1055,1055,1055,1055,1055,1055,1055,1055,1055]
-    line [1055,1055,1055,1055,1055,1055,1055,1055,1055]
 \`\`\`
 `);
 	});
@@ -151,9 +148,6 @@ xychart-beta
     x-axis ["Feb 19"]
     y-axis "Duration (in seconds)"
     bar [521]
-    line [521]
-    line [521]
-    line [521]
 \`\`\`
 `);
 	});
