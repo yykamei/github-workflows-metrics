@@ -65,6 +65,7 @@ describe("GitHubIssueContent", () => {
 ---
 config:
     xyChart:
+        width: 900
         xAxis:
             labelPadding: 16
             labelFontSize: 8
@@ -83,6 +84,7 @@ xychart-beta
 ---
 config:
     xyChart:
+        width: 900
         xAxis:
             labelPadding: 16
             labelFontSize: 8

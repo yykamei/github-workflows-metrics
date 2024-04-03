@@ -43,6 +43,7 @@ export class MermaidXYChart {
 ---
 config:
     xyChart:
+        width: 900
         xAxis:
             labelPadding: 16
             labelFontSize: 8
