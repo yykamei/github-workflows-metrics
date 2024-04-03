@@ -1,6 +1,13 @@
 name: GitHub Workflow Metrics
 description: TODO
 inputs:
+  range:
+    description: |
+      The range of time to measure the workflows.
+      This can be:
+      7days, 14days, 30days
+    required: false
+    default: 30days
   only:
     description: Only the specified workflows will be measured. This is supposed to be comma-separated list
     required: false

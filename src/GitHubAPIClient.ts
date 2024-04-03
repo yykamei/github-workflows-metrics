@@ -8,6 +8,7 @@ import { GitHubIssue } from "./GitHubIssue";
 import type { GitHubIssueContent } from "./GitHubIssueContent";
 import { GitHubWorkflow } from "./GitHubWorkflow";
 import { GitHubWorkflowRun } from "./GitHubWorkflowRun";
+import type { RangeString } from "./Input";
 import { Usage } from "./Usage";
 
 const GITHUB_LINK_REL_REXT = 'rel="next"';
@@ -102,6 +103,7 @@ export class GitHubAPIClient implements APIClient {
 					page,
 					exclude_pull_requests: options?.excludePullRequests,
 					status: options?.status,
+					created: options?.created && rangeToCreated(options.created),
 				},
 			);
 			link = response.headers.link || "";
@@ -217,3 +219,27 @@ export class GitHubAPIClient implements APIClient {
 		});
 	}
 }
+
+const rangeToCreated = (range: RangeString) => {
+	const now = new Date();
+	switch (range) {
+		case "7days": {
+			now.setDate(now.getDate() - 7);
+			break;
+		}
+		case "14days": {
+			now.setDate(now.getDate() - 14);
+			break;
+		}
+		case "30days": {
+			now.setDate(now.getDate() - 30);
+			break;
+		}
+	}
+	const date = now.toLocaleDateString("en-CA", {
+		year: "numeric",
+		month: "2-digit",
+		day: "2-digit",
+	});
+	return `>=${date}`;
+};

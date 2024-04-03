@@ -14,6 +14,7 @@ const main = async () => {
 		workflows.map(async (w) => {
 			const runs = await repository.getWorkflowRuns(w, {
 				status: input.status,
+				created: input.range,
 			});
 			return new MermaidXYChart(w, runs, input);
 		}),

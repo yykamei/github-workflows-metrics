@@ -3,6 +3,7 @@ import { context } from "@actions/github";
 import type { Context } from "@actions/github/lib/context";
 import type { WorkflowStatus } from "./APIClient";
 
+export type RangeString = "7days" | "14days" | "30days";
 export class Input {
 	constructor(
 		private readonly ctx: Context = context,
@@ -65,6 +66,20 @@ export class Input {
 				return s;
 			default:
 				return undefined;
+		}
+	}
+
+	get range(): RangeString {
+		const s = this.getInputFn("range");
+		switch (s) {
+			case "7days":
+				return s;
+			case "14days":
+				return s;
+			case "30days":
+				return s;
+			default:
+				throw new Error("range must be one of 7days, 14days, or 30days");
 		}
 	}
 

@@ -29174,6 +29174,7 @@ class GitHubAPIClient {
                 page,
                 exclude_pull_requests: options?.excludePullRequests,
                 status: options?.status,
+                created: options?.created && rangeToCreated(options.created),
             });
             link = response.headers.link || "";
             page += 1;
@@ -29254,6 +29255,29 @@ class GitHubAPIClient {
         });
     }
 }
+const rangeToCreated = (range) => {
+    const now = new Date();
+    switch (range) {
+        case "7days": {
+            now.setDate(now.getDate() - 7);
+            break;
+        }
+        case "14days": {
+            now.setDate(now.getDate() - 14);
+            break;
+        }
+        case "30days": {
+            now.setDate(now.getDate() - 30);
+            break;
+        }
+    }
+    const date = now.toLocaleDateString("en-CA", {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+    });
+    return `>=${date}`;
+};
 
 ;// CONCATENATED MODULE: ./src/GitHubIssueContent.ts
 class GitHubIssueContent {
@@ -29375,6 +29399,19 @@ class Input {
                 return undefined;
         }
     }
+    get range() {
+        const s = this.getInputFn("range");
+        switch (s) {
+            case "7days":
+                return s;
+            case "14days":
+                return s;
+            case "30days":
+                return s;
+            default:
+                throw new Error("range must be one of 7days, 14days, or 30days");
+        }
+    }
     get token() {
         return this.getInputFn("token", { required: true });
     }
@@ -29457,6 +29494,7 @@ const main = async () => {
     const charts = await Promise.all(workflows.map(async (w) => {
         const runs = await repository.getWorkflowRuns(w, {
             status: input.status,
+            created: input.range,
         });
         return new MermaidXYChart(w, runs, input);
     }));

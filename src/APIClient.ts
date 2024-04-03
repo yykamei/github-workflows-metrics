@@ -2,6 +2,7 @@ import type { GitHubIssue } from "./GitHubIssue";
 import type { GitHubIssueContent } from "./GitHubIssueContent";
 import type { GitHubWorkflow } from "./GitHubWorkflow";
 import type { GitHubWorkflowRun } from "./GitHubWorkflowRun";
+import type { RangeString } from "./Input";
 import type { Usage } from "./Usage";
 
 export type WorkflowStatus =
@@ -23,6 +24,7 @@ export type WorkflowStatus =
 export type GetWorkflowRunsOptions = {
 	readonly excludePullRequests?: boolean;
 	readonly status?: WorkflowStatus;
+	readonly created?: RangeString;
 };
 
 export interface APIClient {

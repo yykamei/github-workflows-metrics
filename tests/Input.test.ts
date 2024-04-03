@@ -23,6 +23,8 @@ describe("Input", () => {
 					return "";
 				case "status":
 					return "failure";
+				case "range":
+					return "30days";
 				default:
 					throw new Error("Unsupported key");
 			}
@@ -33,6 +35,7 @@ describe("Input", () => {
 		expect(input.label).toEqual("github-workflows-metrics");
 		expect(input.only).toBeNull();
 		expect(input.status).toEqual("failure");
+		expect(input.range).toEqual("30days");
 		expect(input.token).toEqual("my-token");
 	});
 
@@ -84,5 +87,16 @@ describe("Input", () => {
 		const getInput = vi.fn(() => "unknown");
 		const input = new Input(context, getInput);
 		expect(input.status).toBeUndefined();
+	});
+
+	it("should throw an error with the unsupported range", () => {
+		const context = new Context();
+		vi.spyOn(context, "repo", "get").mockReturnValue({
+			owner: "yykamei",
+			repo: "test-repo",
+		});
+		const getInput = vi.fn(() => "unknown");
+		const input = new Input(context, getInput);
+		expect(() => input.range).toThrowError;
 	});
 });
