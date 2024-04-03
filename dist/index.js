@@ -29412,6 +29412,21 @@ class Input {
                 throw new Error("range must be one of 7days, 14days, or 30days");
         }
     }
+    get aggregate() {
+        const s = this.getInputFn("aggregate");
+        switch (s) {
+            case "average":
+                return s;
+            case "median":
+                return s;
+            case "min":
+                return s;
+            case "max":
+                return s;
+            default:
+                throw new Error("range must be one of average, median, min, or max");
+        }
+    }
     get token() {
         return this.getInputFn("token", { required: true });
     }
@@ -29445,14 +29460,30 @@ class MermaidXYChart {
             }
             return m;
         }, new Map());
-        const means = new Map();
+        const aggregates = new Map();
         for (const [date, seconds] of map.entries()) {
-            const total = seconds.reduce((sum, s) => sum + s, 0);
-            means.set(date, Math.round(total / seconds.length));
+            switch (this.input.aggregate) {
+                case "average": {
+                    aggregates.set(date, getAverage(seconds));
+                    break;
+                }
+                case "median": {
+                    aggregates.set(date, getMedian(seconds));
+                    break;
+                }
+                case "min": {
+                    aggregates.set(date, getMin(seconds));
+                    break;
+                }
+                case "max": {
+                    aggregates.set(date, getMax(seconds));
+                    break;
+                }
+            }
         }
         const xAxis = [];
         const seconds = [];
-        for (const [date, mean] of means.entries()) {
+        for (const [date, mean] of aggregates.entries()) {
             xAxis.unshift(`"${date}"`);
             seconds.unshift(mean);
         }
@@ -29462,6 +29493,7 @@ class MermaidXYChart {
 ---
 config:
     xyChart:
+        width: 900
         xAxis:
             labelPadding: 16
             labelFontSize: 8
@@ -29477,6 +29509,18 @@ xychart-beta
 `;
     }
 }
+const getAverage = (seconds) => {
+    const sum = seconds.reduce((a, b) => a + b, 0);
+    return Math.round(sum / seconds.length);
+};
+const getMedian = (seconds) => {
+    const sortedSeconds = seconds.toSorted();
+    const mid = Math.floor(sortedSeconds.length / 2);
+    // @ts-ignore
+    return sortedSeconds[mid];
+};
+const getMin = (seconds) => Math.min(...seconds);
+const getMax = (seconds) => Math.max(...seconds);
 
 ;// CONCATENATED MODULE: ./src/main.ts
 

@@ -8,6 +8,13 @@ inputs:
       7days, 14days, 30days
     required: false
     default: 30days
+  aggregate:
+    description: |
+      Determines how the workflow metrics should be aggregated.
+      This can be:
+      average, median, min, max
+    required: false
+    default: average
   only:
     description: Only the specified workflows will be measured. This is supposed to be comma-separated list
     required: false

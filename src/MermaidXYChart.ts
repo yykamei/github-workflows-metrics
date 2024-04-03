@@ -26,14 +26,30 @@ export class MermaidXYChart {
 			}
 			return m;
 		}, new Map());
-		const means: Map<string, number> = new Map();
+		const aggregates: Map<string, number> = new Map();
 		for (const [date, seconds] of map.entries()) {
-			const total = seconds.reduce((sum, s) => sum + s, 0);
-			means.set(date, Math.round(total / seconds.length));
+			switch (this.input.aggregate) {
+				case "average": {
+					aggregates.set(date, getAverage(seconds));
+					break;
+				}
+				case "median": {
+					aggregates.set(date, getMedian(seconds));
+					break;
+				}
+				case "min": {
+					aggregates.set(date, getMin(seconds));
+					break;
+				}
+				case "max": {
+					aggregates.set(date, getMax(seconds));
+					break;
+				}
+			}
 		}
 		const xAxis: string[] = [];
 		const seconds: number[] = [];
-		for (const [date, mean] of means.entries()) {
+		for (const [date, mean] of aggregates.entries()) {
 			xAxis.unshift(`"${date}"`);
 			seconds.unshift(mean);
 		}
@@ -59,3 +75,16 @@ xychart-beta
 `;
 	}
 }
+
+const getAverage = (seconds: number[]): number => {
+	const sum = seconds.reduce((a, b) => a + b, 0);
+	return Math.round(sum / seconds.length);
+};
+const getMedian = (seconds: number[]): number => {
+	const sortedSeconds = seconds.toSorted();
+	const mid = Math.floor(sortedSeconds.length / 2);
+	// @ts-ignore
+	return sortedSeconds[mid];
+};
+const getMin = (seconds: number[]) => Math.min(...seconds);
+const getMax = (seconds: number[]) => Math.max(...seconds);

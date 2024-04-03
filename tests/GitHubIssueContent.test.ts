@@ -14,7 +14,16 @@ describe("GitHubIssueContent", () => {
 			owner: "yykamei",
 			repo: "test-repo",
 		});
-		const getInput = vi.fn(() => "");
+		const getInput = vi.fn((key: string) => {
+			switch (key) {
+				case "status":
+					return "";
+				case "aggregate":
+					return "min";
+				default:
+					throw new Error("Unsupported key");
+			}
+		});
 		const input = new Input(context, getInput);
 
 		const mermaidXYChart1 = new MermaidXYChart(

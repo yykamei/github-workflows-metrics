@@ -4,6 +4,8 @@ import type { Context } from "@actions/github/lib/context";
 import type { WorkflowStatus } from "./APIClient";
 
 export type RangeString = "7days" | "14days" | "30days";
+export type AggregateString = "average" | "median" | "min" | "max";
+
 export class Input {
 	constructor(
 		private readonly ctx: Context = context,
@@ -80,6 +82,22 @@ export class Input {
 				return s;
 			default:
 				throw new Error("range must be one of 7days, 14days, or 30days");
+		}
+	}
+
+	get aggregate(): AggregateString {
+		const s = this.getInputFn("aggregate");
+		switch (s) {
+			case "average":
+				return s;
+			case "median":
+				return s;
+			case "min":
+				return s;
+			case "max":
+				return s;
+			default:
+				throw new Error("range must be one of average, median, min, or max");
 		}
 	}
 

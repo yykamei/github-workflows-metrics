@@ -25,6 +25,8 @@ describe("Input", () => {
 					return "failure";
 				case "range":
 					return "30days";
+				case "aggregate":
+					return "median";
 				default:
 					throw new Error("Unsupported key");
 			}
@@ -36,6 +38,7 @@ describe("Input", () => {
 		expect(input.only).toBeNull();
 		expect(input.status).toEqual("failure");
 		expect(input.range).toEqual("30days");
+		expect(input.aggregate).toEqual("median");
 		expect(input.token).toEqual("my-token");
 	});
 
@@ -98,5 +101,16 @@ describe("Input", () => {
 		const getInput = vi.fn(() => "unknown");
 		const input = new Input(context, getInput);
 		expect(() => input.range).toThrowError;
+	});
+
+	it("should throw an error with the unsupported aggregate", () => {
+		const context = new Context();
+		vi.spyOn(context, "repo", "get").mockReturnValue({
+			owner: "yykamei",
+			repo: "test-repo",
+		});
+		const getInput = vi.fn(() => "unknown");
+		const input = new Input(context, getInput);
+		expect(() => input.aggregate).toThrowError;
 	});
 });

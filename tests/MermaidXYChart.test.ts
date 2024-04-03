@@ -13,7 +13,16 @@ describe("DateTime", () => {
 			owner: "yykamei",
 			repo: "test-repo",
 		});
-		const getInput = vi.fn(() => "");
+		const getInput = vi.fn((key: string) => {
+			switch (key) {
+				case "status":
+					return "";
+				case "aggregate":
+					return "average";
+				default:
+					throw new Error("Unsupported key");
+			}
+		});
 		const input = new Input(context, getInput);
 		const dates = [
 			[
@@ -104,13 +113,96 @@ xychart-beta
 `);
 	});
 
+	it("should return medians", () => {
+		const context = new Context();
+		vi.spyOn(context, "repo", "get").mockReturnValue({
+			owner: "yykamei",
+			repo: "test-repo",
+		});
+		const getInput = vi.fn((key: string) => {
+			switch (key) {
+				case "status":
+					return "";
+				case "aggregate":
+					return "median";
+				default:
+					throw new Error("Unsupported key");
+			}
+		});
+		const input = new Input(context, getInput);
+		const dates = [
+			[
+				new DateTime("2024-02-19T12:40:30Z"),
+				new DateTime("2024-02-19T12:48:30Z"),
+			],
+			[
+				new DateTime("2024-02-19T11:50:42Z"),
+				new DateTime("2024-02-19T11:54:42Z"),
+			],
+			[
+				new DateTime("2024-02-19T11:30:28Z"),
+				new DateTime("2024-02-19T11:37:38Z"),
+			],
+		];
+		const runs = dates.map(
+			([createdAt, updatedAt], index) =>
+				new GitHubWorkflowRun({
+					id: 123 - index,
+					runNumber: 300 - index,
+					name: null,
+					displayTitle: "abc",
+					path: "abc.yml",
+					event: "push",
+					conclusion: "success",
+					workflowId: 88,
+					// biome-ignore lint/style/noNonNullAssertion: the test data are supposed to be set.
+					createdAt: createdAt!,
+					// biome-ignore lint/style/noNonNullAssertion: the test data are supposed to be set.
+					updatedAt: updatedAt!,
+				}),
+		);
+		const mermaidXYChart = new MermaidXYChart(
+			new GitHubWorkflow(88, "ABC", "abc.yml"),
+			runs,
+			input,
+		);
+		expect(mermaidXYChart.visualize()).toEqual(`
+\`\`\`mermaid
+---
+config:
+    xyChart:
+        width: 900
+        xAxis:
+            labelPadding: 16
+            labelFontSize: 8
+        yAxis:
+            titlePadding: 16
+---
+xychart-beta
+    title "ABC (abc.yml)"
+    x-axis ["Feb 19"]
+    y-axis "Duration (in seconds)"
+    bar [430]
+\`\`\`
+`);
+	});
+
 	it("should add status", () => {
 		const context = new Context();
 		vi.spyOn(context, "repo", "get").mockReturnValue({
 			owner: "yykamei",
 			repo: "test-repo",
 		});
-		const getInput = vi.fn(() => "success");
+		const getInput = vi.fn((key: string) => {
+			switch (key) {
+				case "status":
+					return "success";
+				case "aggregate":
+					return "max";
+				default:
+					throw new Error("Unsupported key");
+			}
+		});
 		const input = new Input(context, getInput);
 		const mermaidXYChart = new MermaidXYChart(
 			new GitHubWorkflow(88, "ABC", "abc.yml"),
