@@ -29457,11 +29457,13 @@ class MermaidXYChart {
             seconds.unshift(mean);
         }
         const status = this.input.status ? ` for status=${this.input.status}` : "";
+        const { p50, p90, p95 } = this.getPercentiles();
         return `
 \`\`\`mermaid
 ---
 config:
     xyChart:
+        width: 900
         xAxis:
             labelPadding: 16
             labelFontSize: 8
@@ -29473,8 +29475,27 @@ xychart-beta
     x-axis [${xAxis.join(",")}]
     y-axis "Duration (in seconds)"
     bar [${seconds.join(",")}]
+    line [${seconds.map(() => p50).join(",")}]
+    line [${seconds.map(() => p90).join(",")}]
+    line [${seconds.map(() => p95).join(",")}]
 \`\`\`
 `;
+    }
+    getPercentiles() {
+        const durations = this.runs
+            .filter((run) => !run.isOutlier)
+            .map((run) => run.duration.toSeconds())
+            .sort((a, b) => a - b);
+        const percentile = (p) => {
+            const index = Math.floor(p * durations.length);
+            // @ts-ignore
+            return durations[index];
+        };
+        return {
+            p50: percentile(0.5),
+            p90: percentile(0.9),
+            p95: percentile(0.95),
+        };
     }
 }
 
