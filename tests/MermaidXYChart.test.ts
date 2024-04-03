@@ -96,7 +96,7 @@ config:
 ---
 xychart-beta
     title "ABC (abc.yml)"
-    x-axis [2024-02-19,2024-02-20,2024-02-21,2024-02-22,2024-02-23,2024-02-24,2024-02-25,2024-02-26,2024-02-27]
+    x-axis ["Feb 19","Feb 20","Feb 21","Feb 22","Feb 23","Feb 24","Feb 25","Feb 26","Feb 27"]
     y-axis "Duration (in seconds)"
     bar [424,942,971,1055,911,734,684,658,815]
 \`\`\`
@@ -143,7 +143,7 @@ config:
 ---
 xychart-beta
     title "ABC (abc.yml for status=success)"
-    x-axis [2024-02-19]
+    x-axis ["Feb 19"]
     y-axis "Duration (in seconds)"
     bar [521]
 \`\`\`

@@ -73,7 +73,7 @@ config:
 ---
 xychart-beta
     title "ABC (abc.yml)"
-    x-axis [2024-02-27]
+    x-axis ["Feb 27"]
     y-axis "Duration (in seconds)"
     bar [4]
 \`\`\`
@@ -91,7 +91,7 @@ config:
 ---
 xychart-beta
     title "XYZ (xyz.yml)"
-    x-axis [2024-03-27]
+    x-axis ["Mar 27"]
     y-axis "Duration (in seconds)"
     bar [2]
 \`\`\`

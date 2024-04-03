@@ -15,9 +15,8 @@ export class MermaidXYChart {
 				return m;
 			}
 			const date = r.date.toLocaleDateString("en-CA", {
-				year: "numeric",
-				month: "2-digit",
-				day: "2-digit",
+				month: "short",
+				day: "numeric",
 			});
 			const d = m.get(date);
 			if (d) {
@@ -35,7 +34,7 @@ export class MermaidXYChart {
 		const xAxis: string[] = [];
 		const seconds: number[] = [];
 		for (const [date, mean] of means.entries()) {
-			xAxis.unshift(date);
+			xAxis.unshift(`"${date}"`);
 			seconds.unshift(mean);
 		}
 		const status = this.input.status ? ` for status=${this.input.status}` : "";
