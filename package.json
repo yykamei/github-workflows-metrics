@@ -19,7 +19,7 @@
 		"@octokit/request-error": "6.0.2"
 	},
 	"devDependencies": {
-		"@biomejs/biome": "1.6.3",
+		"@biomejs/biome": "1.6.4",
 		"@types/node": "20.11.30",
 		"@vercel/ncc": "0.38.1",
 		"typescript": "5.4.3",
