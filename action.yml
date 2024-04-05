@@ -37,8 +37,8 @@ inputs:
     required: false
     default: ${{ github.token }}
 branding:
-  icon: stop-circle
-  color: yellow
+  icon: bar-chart
+  color: gray-dark
 runs:
   using: node20
   main: dist/index.js
