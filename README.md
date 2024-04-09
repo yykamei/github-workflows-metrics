@@ -62,6 +62,15 @@ jobs:
 | label     | The label for GitHub issues that the GitHub Action creates                                       | false    | github-workflows-metrics |
 | token     | The GitHub token used to create an authenticated client                                          | false    | ${{ github.token }}      |
 
+## Caveat
+
+GitHub Workflows Metrics calculates the duration of each GitHub workflow with `run_started_at` and `updated_at` via
+[List workflow runs for a workflow](https://docs.github.com/en/rest/actions/workflow-runs?apiVersion=2022-11-28#list-workflow-runs-for-a-workflow).
+If correct duration is needed, [Get workflow run usage](https://docs.github.com/en/rest/actions/workflow-runs?apiVersion=2022-11-28#get-workflow-run-usage) should be used,
+but [Get workflow run usage](https://docs.github.com/en/rest/actions/workflow-runs?apiVersion=2022-11-28#get-workflow-run-usage) requires more point values for rate limit on GitHub.
+If GitHub Workflows Metrics uses [Get workflow run usage](https://docs.github.com/en/rest/actions/workflow-runs?apiVersion=2022-11-28#get-workflow-run-usage), it would reach the rate limit soon.
+That's why GitHub Workflows Metrics calculates the duration with `run_started_at` and `updated_at`.
+
 ## Contributing
 
 Please take a look at the [CONTRIBUTING.md](CONTRIBUTING.md). It's always a pleasure to receive any contributions 😄
