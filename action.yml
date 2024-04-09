@@ -1,5 +1,9 @@
 name: GitHub Workflow Metrics
-description: TODO
+description: |
+  GitHub Workflows Metrics is a GitHub Action to measure duration of GitHub Workflows.
+  This will display charts for each GitHub Workflow, similar to the one shown below,
+  on a GitHub issue.
+
 inputs:
   range:
     description: |
