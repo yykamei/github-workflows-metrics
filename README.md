@@ -17,8 +17,8 @@ config:
 xychart-beta
     title "CI (.github/workflows/ci.yml for status=success)"
     x-axis ["Mar 6", "Mar 9", "Mar 10", "Mar 11", "Mar 12", "Mar 13", "Mar 14", "Mar 15", "Mar 16", "Mar 17", "Mar 21", "Mar 23", "Mar 24", "Mar 28", "Mar 29", "Mar 30", "Apr 3"]
-    y-axis "Duration (average in seconds)"
-    bar [38, 39, 37, 42,41, 43, 37, 46, 38,41, 43, 38, 39, 54,41, 42, 69]
+    y-axis "Duration (average in seconds)" 29 --> 82
+    bar [38, 39, 37, 42,41, 43, 37, 46, 38,41, 43, 38, 39, 54, 41, 42, 69]
 ```
 
 ## Motivation

@@ -107,7 +107,7 @@ config:
 xychart-beta
     title "ABC (abc.yml)"
     x-axis ["Feb 19","Feb 20","Feb 21","Feb 22","Feb 23","Feb 24","Feb 25","Feb 26","Feb 27"]
-    y-axis "Duration (average in seconds)"
+    y-axis "Duration (average in seconds)" 339 --> 1266
     bar [424,942,971,1055,911,734,684,658,815]
 \`\`\`
 `);
@@ -181,7 +181,7 @@ config:
 xychart-beta
     title "ABC (abc.yml)"
     x-axis ["Feb 19"]
-    y-axis "Duration (median in seconds)"
+    y-axis "Duration (median in seconds)" 344 --> 516
     bar [430]
 \`\`\`
 `);
@@ -238,7 +238,7 @@ config:
 xychart-beta
     title "ABC (abc.yml for status=success)"
     x-axis ["Feb 19"]
-    y-axis "Duration (max in seconds)"
+    y-axis "Duration (max in seconds)" 416 --> 625
     bar [521]
 \`\`\`
 `);

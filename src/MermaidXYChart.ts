@@ -49,11 +49,15 @@ export class MermaidXYChart {
 		}
 		const xAxis: string[] = [];
 		const seconds: number[] = [];
-		for (const [date, mean] of aggregates.entries()) {
+		for (const [date, value] of aggregates.entries()) {
 			xAxis.unshift(`"${date}"`);
-			seconds.unshift(mean);
+			seconds.unshift(value);
 		}
 		const status = this.input.status ? ` for status=${this.input.status}` : "";
+		// NOTE: When drawing the chart, if the minimum and maximum values of the y-axis are the same as the actual minimum and maximum values,
+		//       the transition of the chart tends to be extreme. To avoid this, allow margins for the minimum and maximum values on the y-axis
+		const yAxisMin = Math.floor(Math.min(...seconds) * 0.8);
+		const yAxisMax = Math.floor(Math.max(...seconds) * 1.2);
 		return `
 \`\`\`mermaid
 ---
@@ -69,7 +73,9 @@ config:
 xychart-beta
     title "${this.workflow.name} (${this.workflow.path}${status})"
     x-axis [${xAxis.join(",")}]
-    y-axis "Duration (${this.input.aggregate} in seconds)"
+    y-axis "Duration (${
+			this.input.aggregate
+		} in seconds)" ${yAxisMin} --> ${yAxisMax}
     bar [${seconds.join(",")}]
 \`\`\`
 `;
