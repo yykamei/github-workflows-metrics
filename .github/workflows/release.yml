@@ -5,6 +5,8 @@ on:
       version:
         description: version. The next release version (without prefix v)
         required: true
+permissions:
+  contents: write
 jobs:
   release:
     runs-on: ubuntu-latest
