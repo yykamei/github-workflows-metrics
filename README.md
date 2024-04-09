@@ -64,12 +64,13 @@ jobs:
 
 ## Caveat
 
-GitHub Workflows Metrics calculates the duration of each GitHub workflow with `run_started_at` and `updated_at` via
-[List workflow runs for a workflow](https://docs.github.com/en/rest/actions/workflow-runs?apiVersion=2022-11-28#list-workflow-runs-for-a-workflow).
-If correct duration is needed, [Get workflow run usage](https://docs.github.com/en/rest/actions/workflow-runs?apiVersion=2022-11-28#get-workflow-run-usage) should be used,
-but [Get workflow run usage](https://docs.github.com/en/rest/actions/workflow-runs?apiVersion=2022-11-28#get-workflow-run-usage) requires more point values for rate limit on GitHub.
-If GitHub Workflows Metrics uses [Get workflow run usage](https://docs.github.com/en/rest/actions/workflow-runs?apiVersion=2022-11-28#get-workflow-run-usage), it would reach the rate limit soon.
-That's why GitHub Workflows Metrics calculates the duration with `run_started_at` and `updated_at`.
+GitHub Workflows Metrics calculates the duration of each GitHub workflow using `run_started_at` and `updated_at` via
+[List workflow runs for a workflow](https://docs.github.com/en/rest/actions/workflow-runs?apiVersion=2022-11-28#list-workflow-runs-for-a-workflow). To obtain an accurate duration,
+[Get workflow run usage](https://docs.github.com/en/rest/actions/workflow-runs?apiVersion=2022-11-28#get-workflow-run-usage) should ideally be used.
+However, [Get workflow run usage](https://docs.github.com/en/rest/actions/workflow-runs?apiVersion=2022-11-28#get-workflow-run-usage) consumes more rate limit points on GitHub.
+Consequently, using [Get workflow run usage](https://docs.github.com/en/rest/actions/workflow-runs?apiVersion=2022-11-28#get-workflow-run-usage) would quickly reach GitHub's rate limit.
+Therefore, GitHub Workflows Metrics relies on `run_started_at` and `updated_at`
+for calculating duration to avoid this limitation.
 
 ## Contributing
 
