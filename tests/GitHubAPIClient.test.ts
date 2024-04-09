@@ -161,17 +161,17 @@ describe("GitHubAPIClient.getWorkflowRuns()", () => {
 						},
 					],
 				},
-				headers: { link: 'rel="next"' },
+				headers: { link: id !== 15 ? 'rel="next"' : "" },
 				url: "https://example.com",
 				status: 200,
 			});
 		}
 
 		const runs = await client.getWorkflowRuns("yykamei", "test-repo", 34);
-		expect(spy).toHaveBeenCalledTimes(10);
-		expect(runs.length).toEqual(10);
+		expect(spy).toHaveBeenCalledTimes(12);
+		expect(runs.length).toEqual(12);
 		expect(runs.map((r) => r.parameters.id)).toEqual([
-			4, 5, 6, 7, 8, 9, 10, 11, 12, 13,
+			4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15,
 		]);
 	});
 });
