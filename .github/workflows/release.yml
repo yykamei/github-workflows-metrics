@@ -33,6 +33,7 @@ jobs:
           mv package.json /tmp/
           jq '.version = "${{ github.event.inputs.version }}"' /tmp/package.json | tee package.json
           npm i --package-lock-only
+          npm run biome:check
 
       - uses: yykamei/actions-git-push@main
         with:
