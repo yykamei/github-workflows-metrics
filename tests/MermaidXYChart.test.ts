@@ -7,7 +7,7 @@ import { Input } from "../src/Input";
 import { MermaidXYChart } from "../src/MermaidXYChart";
 
 describe("DateTime", () => {
-	it("should initialize", () => {
+	it("should visualize", () => {
 		const context = new Context();
 		vi.spyOn(context, "repo", "get").mockReturnValue({
 			owner: "yykamei",
@@ -242,5 +242,30 @@ xychart-beta
     bar [521]
 \`\`\`
 `);
+	});
+
+	it("should return empty string with visualize()", () => {
+		const context = new Context();
+		vi.spyOn(context, "repo", "get").mockReturnValue({
+			owner: "yykamei",
+			repo: "test-repo",
+		});
+		const getInput = vi.fn((key: string) => {
+			switch (key) {
+				case "status":
+					return "";
+				case "aggregate":
+					return "average";
+				default:
+					throw new Error("Unsupported key");
+			}
+		});
+		const input = new Input(context, getInput);
+		const mermaidXYChart = new MermaidXYChart(
+			new GitHubWorkflow(88, "ABC", "abc.yml"),
+			[],
+			input,
+		);
+		expect(mermaidXYChart.visualize()).toEqual("");
 	});
 });

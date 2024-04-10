@@ -26,6 +26,9 @@ export class MermaidXYChart {
 			}
 			return m;
 		}, new Map());
+		if (map.size === 0) {
+			return "";
+		}
 		const aggregates: Map<string, number> = new Map();
 		for (const [date, seconds] of map.entries()) {
 			switch (this.input.aggregate) {
