@@ -18,8 +18,8 @@ jobs:
       - run: npm run tsc:check
       - run: npm run biome:ci
       - run: npm test
-#   dependency-review:
-#     if: github.event_name == 'pull_request'
-#     runs-on: ubuntu-latest
-#     steps:
-#       - uses: actions/dependency-review-action@v4
+  dependency-review:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/dependency-review-action@v4
