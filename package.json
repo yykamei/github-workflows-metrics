@@ -20,7 +20,7 @@
 	},
 	"devDependencies": {
 		"@biomejs/biome": "1.7.3",
-		"@types/node": "20.12.13",
+		"@types/node": "20.14.2",
 		"@vercel/ncc": "0.38.1",
 		"typescript": "5.4.5",
 		"vitest": "1.6.0"
