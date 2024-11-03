@@ -5,7 +5,7 @@
 	"main": "dist/index.js",
 	"scripts": {
 		"build": "ncc build src/index.ts",
-		"biome:check": "biome check --apply .",
+		"biome:check": "biome check --write .",
 		"biome:ci": "biome ci .",
 		"tsc:check": "tsc --noEmit",
 		"test": "vitest"
