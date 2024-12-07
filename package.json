@@ -13,7 +13,7 @@
 	"author": "Yutaka Kamei",
 	"license": "MIT",
 	"dependencies": {
-		"@actions/cache": "3.3.0",
+		"@actions/cache": "4.0.0",
 		"@actions/core": "1.11.1",
 		"@actions/github": "6.0.0",
 		"@octokit/request-error": "6.1.5"
