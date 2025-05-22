@@ -16,7 +16,7 @@
 		"@actions/cache": "4.0.3",
 		"@actions/core": "1.11.1",
 		"@actions/github": "6.0.1",
-		"@octokit/request-error": "6.1.8"
+		"@octokit/request-error": "7.0.0"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "1.9.4",
