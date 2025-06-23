@@ -1,4 +1,4 @@
-import { type InputOptions, getInput } from "@actions/core";
+import { getInput, type InputOptions } from "@actions/core";
 import { context } from "@actions/github";
 import type { Context } from "@actions/github/lib/context";
 import type { WorkflowStatus } from "./APIClient";
