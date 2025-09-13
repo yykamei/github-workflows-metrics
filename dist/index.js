@@ -30454,7 +30454,7 @@ const getAverage = (seconds) => {
 const getMedian = (seconds) => {
     const sortedSeconds = seconds.toSorted();
     const mid = Math.floor(sortedSeconds.length / 2);
-    // @ts-ignore
+    // @ts-expect-error
     return sortedSeconds[mid];
 };
 const getMin = (seconds) => Math.min(...seconds);
