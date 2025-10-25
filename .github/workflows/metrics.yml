@@ -8,7 +8,7 @@ jobs:
   metrics:
     runs-on: ubuntu-latest
     steps:
-      - uses: yykamei/github-workflows-metrics@4b881961f4570b8e7107c842ea966f1c72448f15 # main
+      - uses: yykamei/github-workflows-metrics@main
         with:
           only: ci.yml
           status: success
