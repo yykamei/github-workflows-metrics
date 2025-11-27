@@ -23,7 +23,7 @@ jobs:
     if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/dependency-review-action@125b99508212ce1cc3076ad60f6bd63bf6d88a66 # v4.8.1
+      - uses: actions/dependency-review-action@35ccfd2548df119cb019e3e0533c0272644607b7 # v4.8.1
 
   auto-build:
     if: github.event_name == 'pull_request'
