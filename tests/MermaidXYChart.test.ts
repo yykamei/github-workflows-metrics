@@ -1,4 +1,4 @@
-import { Context } from "@actions/github/lib/context";
+import { context } from "@actions/github";
 import { describe, expect, it, vi } from "vitest";
 import { DateTime } from "../src/DateTime";
 import { GitHubWorkflow } from "../src/GitHubWorkflow";
@@ -8,7 +8,6 @@ import { MermaidXYChart } from "../src/MermaidXYChart";
 
 describe("DateTime", () => {
 	it("should visualize", () => {
-		const context = new Context();
 		vi.spyOn(context, "repo", "get").mockReturnValue({
 			owner: "yykamei",
 			repo: "test-repo",
@@ -114,7 +113,6 @@ xychart-beta
 	});
 
 	it("should return medians", () => {
-		const context = new Context();
 		vi.spyOn(context, "repo", "get").mockReturnValue({
 			owner: "yykamei",
 			repo: "test-repo",
@@ -188,7 +186,6 @@ xychart-beta
 	});
 
 	it("should add status", () => {
-		const context = new Context();
 		vi.spyOn(context, "repo", "get").mockReturnValue({
 			owner: "yykamei",
 			repo: "test-repo",
@@ -245,7 +242,6 @@ xychart-beta
 	});
 
 	it("should return empty string with visualize()", () => {
-		const context = new Context();
 		vi.spyOn(context, "repo", "get").mockReturnValue({
 			owner: "yykamei",
 			repo: "test-repo",

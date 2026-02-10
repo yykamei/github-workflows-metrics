@@ -1,4 +1,4 @@
-import { Context } from "@actions/github/lib/context";
+import { context } from "@actions/github";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { Input } from "../src/Input";
 
@@ -8,7 +8,6 @@ describe("Input", () => {
 	});
 
 	it("should return inputs", () => {
-		const context = new Context();
 		vi.spyOn(context, "repo", "get").mockReturnValue({
 			owner: "yykamei",
 			repo: "test-repo",
@@ -43,7 +42,6 @@ describe("Input", () => {
 	});
 
 	it("should return an Array for only when specified", () => {
-		const context = new Context();
 		vi.spyOn(context, "repo", "get").mockReturnValue({
 			owner: "yykamei",
 			repo: "test-repo",
@@ -61,7 +59,6 @@ describe("Input", () => {
 	});
 
 	it("should validate status input", () => {
-		const context = new Context();
 		vi.spyOn(context, "repo", "get").mockReturnValue({
 			owner: "yykamei",
 			repo: "test-repo",
@@ -93,7 +90,6 @@ describe("Input", () => {
 	});
 
 	it("should throw an error with the unsupported range", () => {
-		const context = new Context();
 		vi.spyOn(context, "repo", "get").mockReturnValue({
 			owner: "yykamei",
 			repo: "test-repo",
@@ -104,7 +100,6 @@ describe("Input", () => {
 	});
 
 	it("should throw an error with the unsupported aggregate", () => {
-		const context = new Context();
 		vi.spyOn(context, "repo", "get").mockReturnValue({
 			owner: "yykamei",
 			repo: "test-repo",

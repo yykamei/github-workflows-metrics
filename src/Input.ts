@@ -1,6 +1,5 @@
 import { getInput, type InputOptions } from "@actions/core";
 import { context } from "@actions/github";
-import type { Context } from "@actions/github/lib/context";
 import type { WorkflowStatus } from "./APIClient";
 
 export type RangeString = "7days" | "14days" | "30days";
@@ -8,7 +7,7 @@ export type AggregateString = "average" | "median" | "min" | "max";
 
 export class Input {
 	constructor(
-		private readonly ctx: Context = context,
+		private readonly ctx: typeof context = context,
 		private readonly getInputFn: (
 			name: string,
 			options?: InputOptions,
