@@ -1,4 +1,4 @@
-import { Context } from "@actions/github/lib/context";
+import { context } from "@actions/github";
 import { describe, expect, it, vi } from "vitest";
 import { DateTime } from "../src/DateTime";
 import { GitHubIssueContent } from "../src/GitHubIssueContent";
@@ -9,7 +9,6 @@ import { MermaidXYChart } from "../src/MermaidXYChart";
 
 describe("GitHubIssueContent", () => {
 	it("should initialize", () => {
-		const context = new Context();
 		vi.spyOn(context, "repo", "get").mockReturnValue({
 			owner: "yykamei",
 			repo: "test-repo",
