@@ -33,7 +33,7 @@
 		"noUncheckedIndexedAccess": true,
 		"noImplicitOverride": true,
 		"noPropertyAccessFromIndexSignature": true,
-		"moduleResolution": "node",
+		"moduleResolution": "bundler",
 		"resolveJsonModule": true,
 		"rootDirs": ["src"],
 		"esModuleInterop": true,
