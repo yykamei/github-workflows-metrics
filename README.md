@@ -54,7 +54,7 @@ jobs:
 ## Inputs
 
 | Name      | Description                                                                                      | Required | Default                  |
-|-----------|--------------------------------------------------------------------------------------------------|----------|--------------------------|
+| --------- | ------------------------------------------------------------------------------------------------ | -------- | ------------------------ |
 | range     | The range of time to measure the workflows. This can be: 7days, 14days, 30days                   | false    | 30days                   |
 | aggregate | Determines how the workflow metrics should be aggregated. This can be: average, median, min, max | false    | average                  |
 | only      | Only the specified workflows will be measured. This is supposed to be comma-separated list       | false    | ""                       |
