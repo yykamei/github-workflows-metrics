@@ -29320,7 +29320,7 @@ try {
     await (0,_main__WEBPACK_IMPORTED_MODULE_1__/* ["default"] */ .A)();
 }
 catch (e) {
-    console.log(e);
+    console.error(e instanceof Error ? e.message : String(e));
     (0,_actions_core__WEBPACK_IMPORTED_MODULE_0__/* .setFailed */ .C1)(`Unhandled error: ${e}`);
 }
 
