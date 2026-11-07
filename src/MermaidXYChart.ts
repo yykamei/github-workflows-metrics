@@ -74,7 +74,7 @@ config:
             titlePadding: 16
 ---
 xychart-beta
-    title "${this.workflow.name} (${this.workflow.path}${status})"
+    title "${escapeMermaidTitle(this.workflow.name)} (${escapeMermaidTitle(this.workflow.path)}${status})"
     x-axis [${xAxis.join(",")}]
     y-axis "Duration (${
 			this.input.aggregate
@@ -84,6 +84,13 @@ xychart-beta
 `;
 	}
 }
+
+const escapeMermaidTitle = (value: string): string => {
+	return value
+		.replace(/\\/g, "\\\\")
+		.replace(/"/g, '\\"')
+		.replace(/[\r\n]+/g, " ");
+};
 
 const getAverage = (seconds: number[]): number => {
 	const sum = seconds.reduce((a, b) => a + b, 0);
